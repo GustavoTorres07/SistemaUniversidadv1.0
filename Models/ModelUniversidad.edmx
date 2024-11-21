@@ -1,0 +1,1103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBsistemaUniversidadModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CARRERA">
+          <Key>
+            <PropertyRef Name="id_carrera" />
+          </Key>
+          <Property Name="id_carrera" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_carrera" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="estado_carrera" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CICLO">
+          <Key>
+            <PropertyRef Name="id_ciclo" />
+          </Key>
+          <Property Name="id_ciclo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="carrera_id" Type="int" Nullable="false" />
+          <Property Name="nombre_ciclo" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CONDICIONESTUDIANTE">
+          <Key>
+            <PropertyRef Name="id_condicion_estudiante" />
+          </Key>
+          <Property Name="id_condicion_estudiante" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_condicion_estudiante" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="estado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CONDICIONESTUDIANTEMATERIA">
+          <Key>
+            <PropertyRef Name="id_condicion_estudiante_materia" />
+          </Key>
+          <Property Name="id_condicion_estudiante_materia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_condicion" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CONDICIONUSUARIO">
+          <Key>
+            <PropertyRef Name="id_condicion_usuario" />
+          </Key>
+          <Property Name="id_condicion_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_condicion_usuario" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ESTUDIANTE">
+          <Key>
+            <PropertyRef Name="id_estudiante" />
+          </Key>
+          <Property Name="id_estudiante" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sexo_id" Type="int" Nullable="false" />
+          <Property Name="carrera_id" Type="int" Nullable="false" />
+          <Property Name="localidad_id" Type="int" Nullable="false" />
+          <Property Name="condicion_estudiante_id" Type="int" Nullable="false" />
+          <Property Name="numero_legajo" Type="int" Nullable="false" />
+          <Property Name="nombre_estudiante" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="apellido_estudiante" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="edad_estudiante" Type="int" Nullable="false" />
+          <Property Name="fecha_nacimiento_estudiante" Type="date" Nullable="false" />
+          <Property Name="dni_estudiante" Type="int" Nullable="false" />
+          <Property Name="estado_estudiante" Type="bit" Nullable="false" />
+          <Property Name="fecha_registro_estudiante" Type="date" Nullable="false" />
+          <Property Name="celular_estudiante" Type="nvarchar" MaxLength="50" />
+          <Property Name="email_estudiante" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="ESTUDIANTEMATERIAEXAMEN">
+          <Key>
+            <PropertyRef Name="id_estudiante_materia_examen" />
+          </Key>
+          <Property Name="id_estudiante_materia_examen" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="estudiante_id" Type="int" Nullable="false" />
+          <Property Name="materia_id" Type="int" Nullable="false" />
+          <Property Name="condicion_estudiante_materia_id" Type="int" Nullable="false" />
+          <Property Name="examen1" Type="nvarchar" MaxLength="50" />
+          <Property Name="recuperatorio_examen1" Type="nvarchar" MaxLength="50" />
+          <Property Name="examen2" Type="nvarchar" MaxLength="50" />
+          <Property Name="recuperatorio_examen2" Type="nvarchar" MaxLength="50" />
+          <Property Name="examen3" Type="nvarchar" MaxLength="50" />
+          <Property Name="recuperatorio_examen3" Type="nvarchar" MaxLength="50" />
+          <Property Name="examen_final" Type="nvarchar" MaxLength="50" />
+          <Property Name="examen_integrador" Type="nvarchar" MaxLength="50" />
+          <Property Name="nota_final" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="INSCRIPCIONESTUDIANTEMATERIA">
+          <Key>
+            <PropertyRef Name="id_inscripcion_estudiante_materia" />
+          </Key>
+          <Property Name="id_inscripcion_estudiante_materia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="estudiante_id" Type="int" Nullable="false" />
+          <Property Name="materia_id" Type="int" Nullable="false" />
+          <Property Name="estado_inscripcion" Type="bit" Nullable="false" />
+          <Property Name="fecha_inscripcion_estudiante_materia" Type="date" />
+        </EntityType>
+        <EntityType Name="LOCALIDAD">
+          <Key>
+            <PropertyRef Name="id_localidad" />
+          </Key>
+          <Property Name="id_localidad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_localidad" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MATERIA">
+          <Key>
+            <PropertyRef Name="id_materia" />
+          </Key>
+          <Property Name="id_materia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ciclo_id" Type="int" Nullable="false" />
+          <Property Name="nombre_materia" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="codigo_materia" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="correlativa_materia" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PROFESORMATERIA">
+          <Key>
+            <PropertyRef Name="id_profesor_materia" />
+          </Key>
+          <Property Name="id_profesor_materia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuario_id" Type="int" Nullable="false" />
+          <Property Name="materia_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ROL">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_rol" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SEXO">
+          <Key>
+            <PropertyRef Name="id_sexo" />
+          </Key>
+          <Property Name="id_sexo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_sexo" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="localidad_id" Type="int" Nullable="false" />
+          <Property Name="sexo_id" Type="int" Nullable="false" />
+          <Property Name="rol_id" Type="int" Nullable="false" />
+          <Property Name="condicion_usuario_id" Type="int" Nullable="false" />
+          <Property Name="nombre_usuario" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="apellido_usuario" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="dni_usuario" Type="int" Nullable="false" />
+          <Property Name="fecha_nacimiento_usuario" Type="date" Nullable="false" />
+          <Property Name="edad_usuario" Type="int" Nullable="false" />
+          <Property Name="celular_usuario" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="email_usuario" Type="varchar" MaxLength="250" />
+          <Property Name="fecha_registro_usuario" Type="date" Nullable="false" />
+          <Property Name="usuario_usuario" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="clave_usuario" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="estado_usuario" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CICLO_CARRERA">
+          <End Role="CARRERA" Type="Self.CARRERA" Multiplicity="1" />
+          <End Role="CICLO" Type="Self.CICLO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CARRERA">
+              <PropertyRef Name="id_carrera" />
+            </Principal>
+            <Dependent Role="CICLO">
+              <PropertyRef Name="carrera_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_CARRERA">
+          <End Role="CARRERA" Type="Self.CARRERA" Multiplicity="1" />
+          <End Role="ESTUDIANTE" Type="Self.ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CARRERA">
+              <PropertyRef Name="id_carrera" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="carrera_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_CONDICIONESTUDIANTE">
+          <End Role="CONDICIONESTUDIANTE" Type="Self.CONDICIONESTUDIANTE" Multiplicity="1" />
+          <End Role="ESTUDIANTE" Type="Self.ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONDICIONESTUDIANTE">
+              <PropertyRef Name="id_condicion_estudiante" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="condicion_estudiante_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_LOCALIDAD">
+          <End Role="LOCALIDAD" Type="Self.LOCALIDAD" Multiplicity="1" />
+          <End Role="ESTUDIANTE" Type="Self.ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOCALIDAD">
+              <PropertyRef Name="id_localidad" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="localidad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_SEXO">
+          <End Role="SEXO" Type="Self.SEXO" Multiplicity="1" />
+          <End Role="ESTUDIANTE" Type="Self.ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SEXO">
+              <PropertyRef Name="id_sexo" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="sexo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA">
+          <End Role="CONDICIONESTUDIANTEMATERIA" Type="Self.CONDICIONESTUDIANTEMATERIA" Multiplicity="1" />
+          <End Role="ESTUDIANTEMATERIAEXAMEN" Type="Self.ESTUDIANTEMATERIAEXAMEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONDICIONESTUDIANTEMATERIA">
+              <PropertyRef Name="id_condicion_estudiante_materia" />
+            </Principal>
+            <Dependent Role="ESTUDIANTEMATERIAEXAMEN">
+              <PropertyRef Name="condicion_estudiante_materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE">
+          <End Role="ESTUDIANTE" Type="Self.ESTUDIANTE" Multiplicity="1" />
+          <End Role="ESTUDIANTEMATERIAEXAMEN" Type="Self.ESTUDIANTEMATERIAEXAMEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTUDIANTE">
+              <PropertyRef Name="id_estudiante" />
+            </Principal>
+            <Dependent Role="ESTUDIANTEMATERIAEXAMEN">
+              <PropertyRef Name="estudiante_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTEMATERIAEXAMEN_MATERIA">
+          <End Role="MATERIA" Type="Self.MATERIA" Multiplicity="1" />
+          <End Role="ESTUDIANTEMATERIAEXAMEN" Type="Self.ESTUDIANTEMATERIAEXAMEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MATERIA">
+              <PropertyRef Name="id_materia" />
+            </Principal>
+            <Dependent Role="ESTUDIANTEMATERIAEXAMEN">
+              <PropertyRef Name="materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE">
+          <End Role="ESTUDIANTE" Type="Self.ESTUDIANTE" Multiplicity="1" />
+          <End Role="INSCRIPCIONESTUDIANTEMATERIA" Type="Self.INSCRIPCIONESTUDIANTEMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTUDIANTE">
+              <PropertyRef Name="id_estudiante" />
+            </Principal>
+            <Dependent Role="INSCRIPCIONESTUDIANTEMATERIA">
+              <PropertyRef Name="estudiante_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA">
+          <End Role="MATERIA" Type="Self.MATERIA" Multiplicity="1" />
+          <End Role="INSCRIPCIONESTUDIANTEMATERIA" Type="Self.INSCRIPCIONESTUDIANTEMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MATERIA">
+              <PropertyRef Name="id_materia" />
+            </Principal>
+            <Dependent Role="INSCRIPCIONESTUDIANTEMATERIA">
+              <PropertyRef Name="materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MATERIA_CICLO1">
+          <End Role="CICLO" Type="Self.CICLO" Multiplicity="1" />
+          <End Role="MATERIA" Type="Self.MATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CICLO">
+              <PropertyRef Name="id_ciclo" />
+            </Principal>
+            <Dependent Role="MATERIA">
+              <PropertyRef Name="ciclo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROFESORMATERIA_MATERIA">
+          <End Role="MATERIA" Type="Self.MATERIA" Multiplicity="1" />
+          <End Role="PROFESORMATERIA" Type="Self.PROFESORMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MATERIA">
+              <PropertyRef Name="id_materia" />
+            </Principal>
+            <Dependent Role="PROFESORMATERIA">
+              <PropertyRef Name="materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROFESORMATERIA_USUARIO">
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="1" />
+          <End Role="PROFESORMATERIA" Type="Self.PROFESORMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIO">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="PROFESORMATERIA">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_CONDICIONUSUARIO">
+          <End Role="CONDICIONUSUARIO" Type="Self.CONDICIONUSUARIO" Multiplicity="1" />
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONDICIONUSUARIO">
+              <PropertyRef Name="id_condicion_usuario" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="condicion_usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_LOCALIDAD">
+          <End Role="LOCALIDAD" Type="Self.LOCALIDAD" Multiplicity="1" />
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOCALIDAD">
+              <PropertyRef Name="id_localidad" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="localidad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_ROL">
+          <End Role="ROL" Type="Self.ROL" Multiplicity="1" />
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROL">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_SEXO">
+          <End Role="SEXO" Type="Self.SEXO" Multiplicity="1" />
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SEXO">
+              <PropertyRef Name="id_sexo" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="sexo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBsistemaUniversidadModelStoreContainer">
+          <EntitySet Name="CARRERA" EntityType="Self.CARRERA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CICLO" EntityType="Self.CICLO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONDICIONESTUDIANTE" EntityType="Self.CONDICIONESTUDIANTE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONDICIONESTUDIANTEMATERIA" EntityType="Self.CONDICIONESTUDIANTEMATERIA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONDICIONUSUARIO" EntityType="Self.CONDICIONUSUARIO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ESTUDIANTE" EntityType="Self.ESTUDIANTE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ESTUDIANTEMATERIAEXAMEN" EntityType="Self.ESTUDIANTEMATERIAEXAMEN" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="INSCRIPCIONESTUDIANTEMATERIA" EntityType="Self.INSCRIPCIONESTUDIANTEMATERIA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOCALIDAD" EntityType="Self.LOCALIDAD" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MATERIA" EntityType="Self.MATERIA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROFESORMATERIA" EntityType="Self.PROFESORMATERIA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ROL" EntityType="Self.ROL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SEXO" EntityType="Self.SEXO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CICLO_CARRERA" Association="Self.FK_CICLO_CARRERA">
+            <End Role="CARRERA" EntitySet="CARRERA" />
+            <End Role="CICLO" EntitySet="CICLO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_CARRERA" Association="Self.FK_ESTUDIANTE_CARRERA">
+            <End Role="CARRERA" EntitySet="CARRERA" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_CONDICIONESTUDIANTE" Association="Self.FK_ESTUDIANTE_CONDICIONESTUDIANTE">
+            <End Role="CONDICIONESTUDIANTE" EntitySet="CONDICIONESTUDIANTE" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_LOCALIDAD" Association="Self.FK_ESTUDIANTE_LOCALIDAD">
+            <End Role="LOCALIDAD" EntitySet="LOCALIDAD" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_SEXO" Association="Self.FK_ESTUDIANTE_SEXO">
+            <End Role="SEXO" EntitySet="SEXO" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA" Association="Self.FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA">
+            <End Role="CONDICIONESTUDIANTEMATERIA" EntitySet="CONDICIONESTUDIANTEMATERIA" />
+            <End Role="ESTUDIANTEMATERIAEXAMEN" EntitySet="ESTUDIANTEMATERIAEXAMEN" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE" Association="Self.FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE">
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+            <End Role="ESTUDIANTEMATERIAEXAMEN" EntitySet="ESTUDIANTEMATERIAEXAMEN" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTEMATERIAEXAMEN_MATERIA" Association="Self.FK_ESTUDIANTEMATERIAEXAMEN_MATERIA">
+            <End Role="MATERIA" EntitySet="MATERIA" />
+            <End Role="ESTUDIANTEMATERIAEXAMEN" EntitySet="ESTUDIANTEMATERIAEXAMEN" />
+          </AssociationSet>
+          <AssociationSet Name="FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE" Association="Self.FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE">
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+            <End Role="INSCRIPCIONESTUDIANTEMATERIA" EntitySet="INSCRIPCIONESTUDIANTEMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA" Association="Self.FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA">
+            <End Role="MATERIA" EntitySet="MATERIA" />
+            <End Role="INSCRIPCIONESTUDIANTEMATERIA" EntitySet="INSCRIPCIONESTUDIANTEMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MATERIA_CICLO1" Association="Self.FK_MATERIA_CICLO1">
+            <End Role="CICLO" EntitySet="CICLO" />
+            <End Role="MATERIA" EntitySet="MATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROFESORMATERIA_MATERIA" Association="Self.FK_PROFESORMATERIA_MATERIA">
+            <End Role="MATERIA" EntitySet="MATERIA" />
+            <End Role="PROFESORMATERIA" EntitySet="PROFESORMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROFESORMATERIA_USUARIO" Association="Self.FK_PROFESORMATERIA_USUARIO">
+            <End Role="USUARIO" EntitySet="USUARIO" />
+            <End Role="PROFESORMATERIA" EntitySet="PROFESORMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_CONDICIONUSUARIO" Association="Self.FK_USUARIO_CONDICIONUSUARIO">
+            <End Role="CONDICIONUSUARIO" EntitySet="CONDICIONUSUARIO" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_LOCALIDAD" Association="Self.FK_USUARIO_LOCALIDAD">
+            <End Role="LOCALIDAD" EntitySet="LOCALIDAD" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_ROL" Association="Self.FK_USUARIO_ROL">
+            <End Role="ROL" EntitySet="ROL" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_SEXO" Association="Self.FK_USUARIO_SEXO">
+            <End Role="SEXO" EntitySet="SEXO" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBsistemaUniversidadModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="UniversidadContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CARRERA" EntityType="DBsistemaUniversidadModel.CARRERA" />
+          <EntitySet Name="CICLO" EntityType="DBsistemaUniversidadModel.CICLO" />
+          <EntitySet Name="CONDICIONESTUDIANTE" EntityType="DBsistemaUniversidadModel.CONDICIONESTUDIANTE" />
+          <EntitySet Name="CONDICIONESTUDIANTEMATERIA" EntityType="DBsistemaUniversidadModel.CONDICIONESTUDIANTEMATERIA" />
+          <EntitySet Name="CONDICIONUSUARIO" EntityType="DBsistemaUniversidadModel.CONDICIONUSUARIO" />
+          <EntitySet Name="ESTUDIANTE" EntityType="DBsistemaUniversidadModel.ESTUDIANTE" />
+          <EntitySet Name="ESTUDIANTEMATERIAEXAMEN" EntityType="DBsistemaUniversidadModel.ESTUDIANTEMATERIAEXAMEN" />
+          <EntitySet Name="INSCRIPCIONESTUDIANTEMATERIA" EntityType="DBsistemaUniversidadModel.INSCRIPCIONESTUDIANTEMATERIA" />
+          <EntitySet Name="LOCALIDAD" EntityType="DBsistemaUniversidadModel.LOCALIDAD" />
+          <EntitySet Name="MATERIA" EntityType="DBsistemaUniversidadModel.MATERIA" />
+          <EntitySet Name="PROFESORMATERIA" EntityType="DBsistemaUniversidadModel.PROFESORMATERIA" />
+          <EntitySet Name="ROL" EntityType="DBsistemaUniversidadModel.ROL" />
+          <EntitySet Name="SEXO" EntityType="DBsistemaUniversidadModel.SEXO" />
+          <EntitySet Name="USUARIO" EntityType="DBsistemaUniversidadModel.USUARIO" />
+          <AssociationSet Name="FK_CICLO_CARRERA" Association="DBsistemaUniversidadModel.FK_CICLO_CARRERA">
+            <End Role="CARRERA" EntitySet="CARRERA" />
+            <End Role="CICLO" EntitySet="CICLO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_CARRERA" Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_CARRERA">
+            <End Role="CARRERA" EntitySet="CARRERA" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MATERIA_CICLO1" Association="DBsistemaUniversidadModel.FK_MATERIA_CICLO1">
+            <End Role="CICLO" EntitySet="CICLO" />
+            <End Role="MATERIA" EntitySet="MATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_CONDICIONESTUDIANTE" Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_CONDICIONESTUDIANTE">
+            <End Role="CONDICIONESTUDIANTE" EntitySet="CONDICIONESTUDIANTE" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA" Association="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA">
+            <End Role="CONDICIONESTUDIANTEMATERIA" EntitySet="CONDICIONESTUDIANTEMATERIA" />
+            <End Role="ESTUDIANTEMATERIAEXAMEN" EntitySet="ESTUDIANTEMATERIAEXAMEN" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_CONDICIONUSUARIO" Association="DBsistemaUniversidadModel.FK_USUARIO_CONDICIONUSUARIO">
+            <End Role="CONDICIONUSUARIO" EntitySet="CONDICIONUSUARIO" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_LOCALIDAD" Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_LOCALIDAD">
+            <End Role="LOCALIDAD" EntitySet="LOCALIDAD" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTE_SEXO" Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_SEXO">
+            <End Role="SEXO" EntitySet="SEXO" />
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE" Association="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE">
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+            <End Role="ESTUDIANTEMATERIAEXAMEN" EntitySet="ESTUDIANTEMATERIAEXAMEN" />
+          </AssociationSet>
+          <AssociationSet Name="FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE" Association="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE">
+            <End Role="ESTUDIANTE" EntitySet="ESTUDIANTE" />
+            <End Role="INSCRIPCIONESTUDIANTEMATERIA" EntitySet="INSCRIPCIONESTUDIANTEMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ESTUDIANTEMATERIAEXAMEN_MATERIA" Association="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_MATERIA">
+            <End Role="MATERIA" EntitySet="MATERIA" />
+            <End Role="ESTUDIANTEMATERIAEXAMEN" EntitySet="ESTUDIANTEMATERIAEXAMEN" />
+          </AssociationSet>
+          <AssociationSet Name="FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA" Association="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA">
+            <End Role="MATERIA" EntitySet="MATERIA" />
+            <End Role="INSCRIPCIONESTUDIANTEMATERIA" EntitySet="INSCRIPCIONESTUDIANTEMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_LOCALIDAD" Association="DBsistemaUniversidadModel.FK_USUARIO_LOCALIDAD">
+            <End Role="LOCALIDAD" EntitySet="LOCALIDAD" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROFESORMATERIA_MATERIA" Association="DBsistemaUniversidadModel.FK_PROFESORMATERIA_MATERIA">
+            <End Role="MATERIA" EntitySet="MATERIA" />
+            <End Role="PROFESORMATERIA" EntitySet="PROFESORMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROFESORMATERIA_USUARIO" Association="DBsistemaUniversidadModel.FK_PROFESORMATERIA_USUARIO">
+            <End Role="USUARIO" EntitySet="USUARIO" />
+            <End Role="PROFESORMATERIA" EntitySet="PROFESORMATERIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_ROL" Association="DBsistemaUniversidadModel.FK_USUARIO_ROL">
+            <End Role="ROL" EntitySet="ROL" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_SEXO" Association="DBsistemaUniversidadModel.FK_USUARIO_SEXO">
+            <End Role="SEXO" EntitySet="SEXO" />
+            <End Role="USUARIO" EntitySet="USUARIO" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CARRERA">
+          <Key>
+            <PropertyRef Name="id_carrera" />
+          </Key>
+          <Property Name="id_carrera" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_carrera" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="estado_carrera" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CICLO" Relationship="DBsistemaUniversidadModel.FK_CICLO_CARRERA" FromRole="CARRERA" ToRole="CICLO" />
+          <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_CARRERA" FromRole="CARRERA" ToRole="ESTUDIANTE" />
+        </EntityType>
+        <EntityType Name="CICLO">
+          <Key>
+            <PropertyRef Name="id_ciclo" />
+          </Key>
+          <Property Name="id_ciclo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="carrera_id" Type="Int32" Nullable="false" />
+          <Property Name="nombre_ciclo" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CARRERA" Relationship="DBsistemaUniversidadModel.FK_CICLO_CARRERA" FromRole="CICLO" ToRole="CARRERA" />
+          <NavigationProperty Name="MATERIA" Relationship="DBsistemaUniversidadModel.FK_MATERIA_CICLO1" FromRole="CICLO" ToRole="MATERIA" />
+        </EntityType>
+        <EntityType Name="CONDICIONESTUDIANTE">
+          <Key>
+            <PropertyRef Name="id_condicion_estudiante" />
+          </Key>
+          <Property Name="id_condicion_estudiante" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_condicion_estudiante" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_CONDICIONESTUDIANTE" FromRole="CONDICIONESTUDIANTE" ToRole="ESTUDIANTE" />
+        </EntityType>
+        <EntityType Name="CONDICIONESTUDIANTEMATERIA">
+          <Key>
+            <PropertyRef Name="id_condicion_estudiante_materia" />
+          </Key>
+          <Property Name="id_condicion_estudiante_materia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_condicion" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ESTUDIANTEMATERIAEXAMEN" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA" FromRole="CONDICIONESTUDIANTEMATERIA" ToRole="ESTUDIANTEMATERIAEXAMEN" />
+        </EntityType>
+        <EntityType Name="CONDICIONUSUARIO">
+          <Key>
+            <PropertyRef Name="id_condicion_usuario" />
+          </Key>
+          <Property Name="id_condicion_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_condicion_usuario" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="USUARIO" Relationship="DBsistemaUniversidadModel.FK_USUARIO_CONDICIONUSUARIO" FromRole="CONDICIONUSUARIO" ToRole="USUARIO" />
+        </EntityType>
+        <EntityType Name="ESTUDIANTE">
+          <Key>
+            <PropertyRef Name="id_estudiante" />
+          </Key>
+          <Property Name="id_estudiante" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sexo_id" Type="Int32" Nullable="false" />
+          <Property Name="carrera_id" Type="Int32" Nullable="false" />
+          <Property Name="localidad_id" Type="Int32" Nullable="false" />
+          <Property Name="condicion_estudiante_id" Type="Int32" Nullable="false" />
+          <Property Name="numero_legajo" Type="Int32" Nullable="false" />
+          <Property Name="nombre_estudiante" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="apellido_estudiante" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="edad_estudiante" Type="Int32" Nullable="false" />
+          <Property Name="fecha_nacimiento_estudiante" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="dni_estudiante" Type="Int32" Nullable="false" />
+          <Property Name="estado_estudiante" Type="Boolean" Nullable="false" />
+          <Property Name="fecha_registro_estudiante" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="celular_estudiante" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email_estudiante" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CARRERA" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_CARRERA" FromRole="ESTUDIANTE" ToRole="CARRERA" />
+          <NavigationProperty Name="CONDICIONESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_CONDICIONESTUDIANTE" FromRole="ESTUDIANTE" ToRole="CONDICIONESTUDIANTE" />
+          <NavigationProperty Name="LOCALIDAD" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_LOCALIDAD" FromRole="ESTUDIANTE" ToRole="LOCALIDAD" />
+          <NavigationProperty Name="SEXO" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_SEXO" FromRole="ESTUDIANTE" ToRole="SEXO" />
+          <NavigationProperty Name="ESTUDIANTEMATERIAEXAMEN" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE" FromRole="ESTUDIANTE" ToRole="ESTUDIANTEMATERIAEXAMEN" />
+          <NavigationProperty Name="INSCRIPCIONESTUDIANTEMATERIA" Relationship="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE" FromRole="ESTUDIANTE" ToRole="INSCRIPCIONESTUDIANTEMATERIA" />
+        </EntityType>
+        <EntityType Name="ESTUDIANTEMATERIAEXAMEN">
+          <Key>
+            <PropertyRef Name="id_estudiante_materia_examen" />
+          </Key>
+          <Property Name="id_estudiante_materia_examen" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="estudiante_id" Type="Int32" Nullable="false" />
+          <Property Name="materia_id" Type="Int32" Nullable="false" />
+          <Property Name="condicion_estudiante_materia_id" Type="Int32" Nullable="false" />
+          <Property Name="examen1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="recuperatorio_examen1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="examen2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="recuperatorio_examen2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="examen3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="recuperatorio_examen3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="examen_final" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="examen_integrador" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="nota_final" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CONDICIONESTUDIANTEMATERIA" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA" FromRole="ESTUDIANTEMATERIAEXAMEN" ToRole="CONDICIONESTUDIANTEMATERIA" />
+          <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE" FromRole="ESTUDIANTEMATERIAEXAMEN" ToRole="ESTUDIANTE" />
+          <NavigationProperty Name="MATERIA" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_MATERIA" FromRole="ESTUDIANTEMATERIAEXAMEN" ToRole="MATERIA" />
+        </EntityType>
+        <EntityType Name="INSCRIPCIONESTUDIANTEMATERIA">
+          <Key>
+            <PropertyRef Name="id_inscripcion_estudiante_materia" />
+          </Key>
+          <Property Name="id_inscripcion_estudiante_materia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="estudiante_id" Type="Int32" Nullable="false" />
+          <Property Name="materia_id" Type="Int32" Nullable="false" />
+          <Property Name="estado_inscripcion" Type="Boolean" Nullable="false" />
+          <Property Name="fecha_inscripcion_estudiante_materia" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE" FromRole="INSCRIPCIONESTUDIANTEMATERIA" ToRole="ESTUDIANTE" />
+          <NavigationProperty Name="MATERIA" Relationship="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA" FromRole="INSCRIPCIONESTUDIANTEMATERIA" ToRole="MATERIA" />
+        </EntityType>
+        <EntityType Name="LOCALIDAD">
+          <Key>
+            <PropertyRef Name="id_localidad" />
+          </Key>
+          <Property Name="id_localidad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_localidad" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_LOCALIDAD" FromRole="LOCALIDAD" ToRole="ESTUDIANTE" />
+          <NavigationProperty Name="USUARIO" Relationship="DBsistemaUniversidadModel.FK_USUARIO_LOCALIDAD" FromRole="LOCALIDAD" ToRole="USUARIO" />
+        </EntityType>
+        <EntityType Name="MATERIA">
+          <Key>
+            <PropertyRef Name="id_materia" />
+          </Key>
+          <Property Name="id_materia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ciclo_id" Type="Int32" Nullable="false" />
+          <Property Name="nombre_materia" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="codigo_materia" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="correlativa_materia" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CICLO" Relationship="DBsistemaUniversidadModel.FK_MATERIA_CICLO1" FromRole="MATERIA" ToRole="CICLO" />
+          <NavigationProperty Name="ESTUDIANTEMATERIAEXAMEN" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_MATERIA" FromRole="MATERIA" ToRole="ESTUDIANTEMATERIAEXAMEN" />
+          <NavigationProperty Name="INSCRIPCIONESTUDIANTEMATERIA" Relationship="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA" FromRole="MATERIA" ToRole="INSCRIPCIONESTUDIANTEMATERIA" />
+          <NavigationProperty Name="PROFESORMATERIA" Relationship="DBsistemaUniversidadModel.FK_PROFESORMATERIA_MATERIA" FromRole="MATERIA" ToRole="PROFESORMATERIA" />
+        </EntityType>
+        <EntityType Name="PROFESORMATERIA">
+          <Key>
+            <PropertyRef Name="id_profesor_materia" />
+          </Key>
+          <Property Name="id_profesor_materia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuario_id" Type="Int32" Nullable="false" />
+          <Property Name="materia_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MATERIA" Relationship="DBsistemaUniversidadModel.FK_PROFESORMATERIA_MATERIA" FromRole="PROFESORMATERIA" ToRole="MATERIA" />
+          <NavigationProperty Name="USUARIO" Relationship="DBsistemaUniversidadModel.FK_PROFESORMATERIA_USUARIO" FromRole="PROFESORMATERIA" ToRole="USUARIO" />
+        </EntityType>
+        <EntityType Name="ROL">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_rol" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="USUARIO" Relationship="DBsistemaUniversidadModel.FK_USUARIO_ROL" FromRole="ROL" ToRole="USUARIO" />
+        </EntityType>
+        <EntityType Name="SEXO">
+          <Key>
+            <PropertyRef Name="id_sexo" />
+          </Key>
+          <Property Name="id_sexo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_sexo" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_ESTUDIANTE_SEXO" FromRole="SEXO" ToRole="ESTUDIANTE" />
+          <NavigationProperty Name="USUARIO" Relationship="DBsistemaUniversidadModel.FK_USUARIO_SEXO" FromRole="SEXO" ToRole="USUARIO" />
+        </EntityType>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="localidad_id" Type="Int32" Nullable="false" />
+          <Property Name="sexo_id" Type="Int32" Nullable="false" />
+          <Property Name="rol_id" Type="Int32" Nullable="false" />
+          <Property Name="condicion_usuario_id" Type="Int32" Nullable="false" />
+          <Property Name="nombre_usuario" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="apellido_usuario" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dni_usuario" Type="Int32" Nullable="false" />
+          <Property Name="fecha_nacimiento_usuario" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="edad_usuario" Type="Int32" Nullable="false" />
+          <Property Name="celular_usuario" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="email_usuario" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_registro_usuario" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="usuario_usuario" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="clave_usuario" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="estado_usuario" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CONDICIONUSUARIO" Relationship="DBsistemaUniversidadModel.FK_USUARIO_CONDICIONUSUARIO" FromRole="USUARIO" ToRole="CONDICIONUSUARIO" />
+          <NavigationProperty Name="LOCALIDAD" Relationship="DBsistemaUniversidadModel.FK_USUARIO_LOCALIDAD" FromRole="USUARIO" ToRole="LOCALIDAD" />
+          <NavigationProperty Name="PROFESORMATERIA" Relationship="DBsistemaUniversidadModel.FK_PROFESORMATERIA_USUARIO" FromRole="USUARIO" ToRole="PROFESORMATERIA" />
+          <NavigationProperty Name="ROL" Relationship="DBsistemaUniversidadModel.FK_USUARIO_ROL" FromRole="USUARIO" ToRole="ROL" />
+          <NavigationProperty Name="SEXO" Relationship="DBsistemaUniversidadModel.FK_USUARIO_SEXO" FromRole="USUARIO" ToRole="SEXO" />
+        </EntityType>
+        <Association Name="FK_CICLO_CARRERA">
+          <End Type="DBsistemaUniversidadModel.CARRERA" Role="CARRERA" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.CICLO" Role="CICLO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CARRERA">
+              <PropertyRef Name="id_carrera" />
+            </Principal>
+            <Dependent Role="CICLO">
+              <PropertyRef Name="carrera_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_CARRERA">
+          <End Type="DBsistemaUniversidadModel.CARRERA" Role="CARRERA" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTE" Role="ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CARRERA">
+              <PropertyRef Name="id_carrera" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="carrera_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MATERIA_CICLO1">
+          <End Type="DBsistemaUniversidadModel.CICLO" Role="CICLO" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.MATERIA" Role="MATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CICLO">
+              <PropertyRef Name="id_ciclo" />
+            </Principal>
+            <Dependent Role="MATERIA">
+              <PropertyRef Name="ciclo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_CONDICIONESTUDIANTE">
+          <End Type="DBsistemaUniversidadModel.CONDICIONESTUDIANTE" Role="CONDICIONESTUDIANTE" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTE" Role="ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONDICIONESTUDIANTE">
+              <PropertyRef Name="id_condicion_estudiante" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="condicion_estudiante_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA">
+          <End Type="DBsistemaUniversidadModel.CONDICIONESTUDIANTEMATERIA" Role="CONDICIONESTUDIANTEMATERIA" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTEMATERIAEXAMEN" Role="ESTUDIANTEMATERIAEXAMEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONDICIONESTUDIANTEMATERIA">
+              <PropertyRef Name="id_condicion_estudiante_materia" />
+            </Principal>
+            <Dependent Role="ESTUDIANTEMATERIAEXAMEN">
+              <PropertyRef Name="condicion_estudiante_materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_CONDICIONUSUARIO">
+          <End Type="DBsistemaUniversidadModel.CONDICIONUSUARIO" Role="CONDICIONUSUARIO" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.USUARIO" Role="USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONDICIONUSUARIO">
+              <PropertyRef Name="id_condicion_usuario" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="condicion_usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_LOCALIDAD">
+          <End Type="DBsistemaUniversidadModel.LOCALIDAD" Role="LOCALIDAD" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTE" Role="ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOCALIDAD">
+              <PropertyRef Name="id_localidad" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="localidad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTE_SEXO">
+          <End Type="DBsistemaUniversidadModel.SEXO" Role="SEXO" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTE" Role="ESTUDIANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SEXO">
+              <PropertyRef Name="id_sexo" />
+            </Principal>
+            <Dependent Role="ESTUDIANTE">
+              <PropertyRef Name="sexo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE">
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTE" Role="ESTUDIANTE" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTEMATERIAEXAMEN" Role="ESTUDIANTEMATERIAEXAMEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTUDIANTE">
+              <PropertyRef Name="id_estudiante" />
+            </Principal>
+            <Dependent Role="ESTUDIANTEMATERIAEXAMEN">
+              <PropertyRef Name="estudiante_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE">
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTE" Role="ESTUDIANTE" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.INSCRIPCIONESTUDIANTEMATERIA" Role="INSCRIPCIONESTUDIANTEMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTUDIANTE">
+              <PropertyRef Name="id_estudiante" />
+            </Principal>
+            <Dependent Role="INSCRIPCIONESTUDIANTEMATERIA">
+              <PropertyRef Name="estudiante_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ESTUDIANTEMATERIAEXAMEN_MATERIA">
+          <End Type="DBsistemaUniversidadModel.MATERIA" Role="MATERIA" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.ESTUDIANTEMATERIAEXAMEN" Role="ESTUDIANTEMATERIAEXAMEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MATERIA">
+              <PropertyRef Name="id_materia" />
+            </Principal>
+            <Dependent Role="ESTUDIANTEMATERIAEXAMEN">
+              <PropertyRef Name="materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA">
+          <End Type="DBsistemaUniversidadModel.MATERIA" Role="MATERIA" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.INSCRIPCIONESTUDIANTEMATERIA" Role="INSCRIPCIONESTUDIANTEMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MATERIA">
+              <PropertyRef Name="id_materia" />
+            </Principal>
+            <Dependent Role="INSCRIPCIONESTUDIANTEMATERIA">
+              <PropertyRef Name="materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_LOCALIDAD">
+          <End Type="DBsistemaUniversidadModel.LOCALIDAD" Role="LOCALIDAD" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.USUARIO" Role="USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOCALIDAD">
+              <PropertyRef Name="id_localidad" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="localidad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROFESORMATERIA_MATERIA">
+          <End Type="DBsistemaUniversidadModel.MATERIA" Role="MATERIA" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.PROFESORMATERIA" Role="PROFESORMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MATERIA">
+              <PropertyRef Name="id_materia" />
+            </Principal>
+            <Dependent Role="PROFESORMATERIA">
+              <PropertyRef Name="materia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROFESORMATERIA_USUARIO">
+          <End Type="DBsistemaUniversidadModel.USUARIO" Role="USUARIO" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.PROFESORMATERIA" Role="PROFESORMATERIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIO">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="PROFESORMATERIA">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_ROL">
+          <End Type="DBsistemaUniversidadModel.ROL" Role="ROL" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.USUARIO" Role="USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROL">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_SEXO">
+          <End Type="DBsistemaUniversidadModel.SEXO" Role="SEXO" Multiplicity="1" />
+          <End Type="DBsistemaUniversidadModel.USUARIO" Role="USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SEXO">
+              <PropertyRef Name="id_sexo" />
+            </Principal>
+            <Dependent Role="USUARIO">
+              <PropertyRef Name="sexo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBsistemaUniversidadModelStoreContainer" CdmEntityContainer="UniversidadContext">
+          <EntitySetMapping Name="CARRERA">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.CARRERA">
+              <MappingFragment StoreEntitySet="CARRERA">
+                <ScalarProperty Name="estado_carrera" ColumnName="estado_carrera" />
+                <ScalarProperty Name="nombre_carrera" ColumnName="nombre_carrera" />
+                <ScalarProperty Name="id_carrera" ColumnName="id_carrera" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CICLO">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.CICLO">
+              <MappingFragment StoreEntitySet="CICLO">
+                <ScalarProperty Name="nombre_ciclo" ColumnName="nombre_ciclo" />
+                <ScalarProperty Name="carrera_id" ColumnName="carrera_id" />
+                <ScalarProperty Name="id_ciclo" ColumnName="id_ciclo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONDICIONESTUDIANTE">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.CONDICIONESTUDIANTE">
+              <MappingFragment StoreEntitySet="CONDICIONESTUDIANTE">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="nombre_condicion_estudiante" ColumnName="nombre_condicion_estudiante" />
+                <ScalarProperty Name="id_condicion_estudiante" ColumnName="id_condicion_estudiante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONDICIONESTUDIANTEMATERIA">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.CONDICIONESTUDIANTEMATERIA">
+              <MappingFragment StoreEntitySet="CONDICIONESTUDIANTEMATERIA">
+                <ScalarProperty Name="nombre_condicion" ColumnName="nombre_condicion" />
+                <ScalarProperty Name="id_condicion_estudiante_materia" ColumnName="id_condicion_estudiante_materia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONDICIONUSUARIO">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.CONDICIONUSUARIO">
+              <MappingFragment StoreEntitySet="CONDICIONUSUARIO">
+                <ScalarProperty Name="nombre_condicion_usuario" ColumnName="nombre_condicion_usuario" />
+                <ScalarProperty Name="id_condicion_usuario" ColumnName="id_condicion_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ESTUDIANTE">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.ESTUDIANTE">
+              <MappingFragment StoreEntitySet="ESTUDIANTE">
+                <ScalarProperty Name="email_estudiante" ColumnName="email_estudiante" />
+                <ScalarProperty Name="celular_estudiante" ColumnName="celular_estudiante" />
+                <ScalarProperty Name="fecha_registro_estudiante" ColumnName="fecha_registro_estudiante" />
+                <ScalarProperty Name="estado_estudiante" ColumnName="estado_estudiante" />
+                <ScalarProperty Name="dni_estudiante" ColumnName="dni_estudiante" />
+                <ScalarProperty Name="fecha_nacimiento_estudiante" ColumnName="fecha_nacimiento_estudiante" />
+                <ScalarProperty Name="edad_estudiante" ColumnName="edad_estudiante" />
+                <ScalarProperty Name="apellido_estudiante" ColumnName="apellido_estudiante" />
+                <ScalarProperty Name="nombre_estudiante" ColumnName="nombre_estudiante" />
+                <ScalarProperty Name="numero_legajo" ColumnName="numero_legajo" />
+                <ScalarProperty Name="condicion_estudiante_id" ColumnName="condicion_estudiante_id" />
+                <ScalarProperty Name="localidad_id" ColumnName="localidad_id" />
+                <ScalarProperty Name="carrera_id" ColumnName="carrera_id" />
+                <ScalarProperty Name="sexo_id" ColumnName="sexo_id" />
+                <ScalarProperty Name="id_estudiante" ColumnName="id_estudiante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ESTUDIANTEMATERIAEXAMEN">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.ESTUDIANTEMATERIAEXAMEN">
+              <MappingFragment StoreEntitySet="ESTUDIANTEMATERIAEXAMEN">
+                <ScalarProperty Name="nota_final" ColumnName="nota_final" />
+                <ScalarProperty Name="examen_integrador" ColumnName="examen_integrador" />
+                <ScalarProperty Name="examen_final" ColumnName="examen_final" />
+                <ScalarProperty Name="recuperatorio_examen3" ColumnName="recuperatorio_examen3" />
+                <ScalarProperty Name="examen3" ColumnName="examen3" />
+                <ScalarProperty Name="recuperatorio_examen2" ColumnName="recuperatorio_examen2" />
+                <ScalarProperty Name="examen2" ColumnName="examen2" />
+                <ScalarProperty Name="recuperatorio_examen1" ColumnName="recuperatorio_examen1" />
+                <ScalarProperty Name="examen1" ColumnName="examen1" />
+                <ScalarProperty Name="condicion_estudiante_materia_id" ColumnName="condicion_estudiante_materia_id" />
+                <ScalarProperty Name="materia_id" ColumnName="materia_id" />
+                <ScalarProperty Name="estudiante_id" ColumnName="estudiante_id" />
+                <ScalarProperty Name="id_estudiante_materia_examen" ColumnName="id_estudiante_materia_examen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INSCRIPCIONESTUDIANTEMATERIA">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.INSCRIPCIONESTUDIANTEMATERIA">
+              <MappingFragment StoreEntitySet="INSCRIPCIONESTUDIANTEMATERIA">
+                <ScalarProperty Name="fecha_inscripcion_estudiante_materia" ColumnName="fecha_inscripcion_estudiante_materia" />
+                <ScalarProperty Name="estado_inscripcion" ColumnName="estado_inscripcion" />
+                <ScalarProperty Name="materia_id" ColumnName="materia_id" />
+                <ScalarProperty Name="estudiante_id" ColumnName="estudiante_id" />
+                <ScalarProperty Name="id_inscripcion_estudiante_materia" ColumnName="id_inscripcion_estudiante_materia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOCALIDAD">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.LOCALIDAD">
+              <MappingFragment StoreEntitySet="LOCALIDAD">
+                <ScalarProperty Name="nombre_localidad" ColumnName="nombre_localidad" />
+                <ScalarProperty Name="id_localidad" ColumnName="id_localidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MATERIA">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.MATERIA">
+              <MappingFragment StoreEntitySet="MATERIA">
+                <ScalarProperty Name="correlativa_materia" ColumnName="correlativa_materia" />
+                <ScalarProperty Name="codigo_materia" ColumnName="codigo_materia" />
+                <ScalarProperty Name="nombre_materia" ColumnName="nombre_materia" />
+                <ScalarProperty Name="ciclo_id" ColumnName="ciclo_id" />
+                <ScalarProperty Name="id_materia" ColumnName="id_materia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROFESORMATERIA">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.PROFESORMATERIA">
+              <MappingFragment StoreEntitySet="PROFESORMATERIA">
+                <ScalarProperty Name="materia_id" ColumnName="materia_id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="id_profesor_materia" ColumnName="id_profesor_materia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ROL">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.ROL">
+              <MappingFragment StoreEntitySet="ROL">
+                <ScalarProperty Name="nombre_rol" ColumnName="nombre_rol" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SEXO">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.SEXO">
+              <MappingFragment StoreEntitySet="SEXO">
+                <ScalarProperty Name="nombre_sexo" ColumnName="nombre_sexo" />
+                <ScalarProperty Name="id_sexo" ColumnName="id_sexo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USUARIO">
+            <EntityTypeMapping TypeName="DBsistemaUniversidadModel.USUARIO">
+              <MappingFragment StoreEntitySet="USUARIO">
+                <ScalarProperty Name="estado_usuario" ColumnName="estado_usuario" />
+                <ScalarProperty Name="clave_usuario" ColumnName="clave_usuario" />
+                <ScalarProperty Name="usuario_usuario" ColumnName="usuario_usuario" />
+                <ScalarProperty Name="fecha_registro_usuario" ColumnName="fecha_registro_usuario" />
+                <ScalarProperty Name="email_usuario" ColumnName="email_usuario" />
+                <ScalarProperty Name="celular_usuario" ColumnName="celular_usuario" />
+                <ScalarProperty Name="edad_usuario" ColumnName="edad_usuario" />
+                <ScalarProperty Name="fecha_nacimiento_usuario" ColumnName="fecha_nacimiento_usuario" />
+                <ScalarProperty Name="dni_usuario" ColumnName="dni_usuario" />
+                <ScalarProperty Name="apellido_usuario" ColumnName="apellido_usuario" />
+                <ScalarProperty Name="nombre_usuario" ColumnName="nombre_usuario" />
+                <ScalarProperty Name="condicion_usuario_id" ColumnName="condicion_usuario_id" />
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="sexo_id" ColumnName="sexo_id" />
+                <ScalarProperty Name="localidad_id" ColumnName="localidad_id" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

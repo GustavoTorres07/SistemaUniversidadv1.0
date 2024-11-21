@@ -1,0 +1,185 @@
+﻿@model IEnumerable<SistemaUniversidadv1._0.Models.CICLO>
+@{
+    ViewBag.Title = "Ciclos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/index.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+<style>
+    .alert-success, .alert-danger {
+        width: 300px;
+        margin: 10px auto;
+        text-align: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1050;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+    }
+</style>
+
+<div class="ciclo-container">
+    <!-- Mensajes de éxito y error -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success" id="alertSuccess">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger" id="alertError">
+            @TempData["Error"]
+        </div>
+    }
+
+    <!-- Filtro por carrera -->
+    <div class="header mb-3">
+        @Html.DropDownList("carrera_id", new SelectList(ViewBag.Carreras, "id_carrera", "nombre_carrera"), "Seleccione Carrera", new { @class = "form-select", onchange = "filtrarCiclosPorCarrera(this)" })
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearCicloModal">
+            <i class="fa-solid fa-folder-plus"></i> Crear Ciclo
+        </button>
+    </div>
+
+    <!-- Mostrar el nombre de la carrera seleccionada -->
+    @if (ViewBag.CarreraSeleccionada != null)
+    {
+        <h4 class="mb-4">Ciclos de: @ViewBag.CarreraSeleccionada</h4>
+    }
+
+    <!-- Mensaje cuando no hay ciclos -->
+    @if (!Model.Any())
+    {
+        <p class="text-center">@ViewBag.Mensaje</p>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ciclo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ciclo in Model)
+                {
+                    <tr>
+                        <td>@ciclo.nombre_ciclo</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Ciclo", new { id = ciclo.id_ciclo })" class="btn btn-sm btn-warning">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCicloModal" data-id_ciclo="@ciclo.id_ciclo" data-nombre_ciclo="@ciclo.nombre_ciclo">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<!-- Modal para Crear Ciclo -->
+<div class="modal fade" id="crearCicloModal" tabindex="-1" aria-labelledby="crearCicloModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="@Url.Action("CrearCiclo", "Ciclo")" method="post">
+                @Html.AntiForgeryToken()  <!-- Agregar el token antifalsificación aquí -->
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearCicloModalLabel">Crear Ciclo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="carrera_id">Carrera</label>
+                        @Html.DropDownList("carrera_id", new SelectList(ViewBag.Carreras, "id_carrera", "nombre_carrera"), "Seleccione Carrera", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre_ciclo">Nombre del Ciclo</label>
+                        <input type="text" class="form-control" id="nombre_ciclo" name="nombre_ciclo" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Eliminar Ciclo -->
+<div class="modal fade" id="eliminarCicloModal" tabindex="-1" aria-labelledby="eliminarCicloModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="eliminarCicloForm" action="@Url.Action("EliminarCiclo", "Ciclo")" method="post">
+                @Html.AntiForgeryToken()  <!-- Agregar el token antifalsificación aquí -->
+                <input type="hidden" id="id_ciclo" name="id_ciclo" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarCicloModalLabel">Eliminar Ciclo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea eliminar el ciclo <strong id="nombre_ciclo_text"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Desaparece las alertas después de 3 segundos
+    setTimeout(function () {
+        let successAlert = document.getElementById("alertSuccess");
+        let errorAlert = document.getElementById("alertError");
+        if (successAlert) {
+            successAlert.style.opacity = "0";
+            setTimeout(() => { successAlert.remove(); }, 500);
+        }
+        if (errorAlert) {
+            errorAlert.style.opacity = "0";
+            setTimeout(() => { errorAlert.remove(); }, 500);
+        }
+    }, 3000);
+
+    // Filtro de ciclos por carrera
+    function filtrarCiclosPorCarrera(select) {
+        let carreraId = select.value;
+        if (carreraId) {
+            window.location.href = '@Url.Action("Index", "Ciclo")?carrera_id=' + carreraId;
+        } else {
+            window.location.href = '@Url.Action("Index", "Ciclo")';
+        }
+    }
+
+    // Configuración del modal de eliminación para obtener datos dinámicos
+    document.addEventListener('DOMContentLoaded', function () {
+        var eliminarCicloModal = document.getElementById('eliminarCicloModal');
+        eliminarCicloModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var idCiclo = button.getAttribute('data-id_ciclo');
+            var nombreCiclo = button.getAttribute('data-nombre_ciclo');
+
+            var modalInputId = eliminarCicloModal.querySelector('#id_ciclo');
+            var modalCicloName = eliminarCicloModal.querySelector('#nombre_ciclo_text');
+
+            modalInputId.value = idCiclo;
+            modalCicloName.textContent = nombreCiclo;
+        });
+    });
+</script>

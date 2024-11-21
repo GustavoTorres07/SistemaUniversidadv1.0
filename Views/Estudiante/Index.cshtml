@@ -1,0 +1,192 @@
+﻿@model List<SistemaUniversidadv1._0.Models.ESTUDIANTE>
+@{
+    ViewBag.Title = "Estudiantes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/index.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .alert-success {
+        width: 400px;
+        margin: 10px auto;
+        text-align: center;
+    }
+
+    .acciones-btn {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .btn-container {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+
+<div class="usuario-container">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+
+
+<div class="header">
+    <!-- Formulario para filtrar estudiantes por carrera -->
+    <div class="filter-container">
+        <form method="get" action="@Url.Action("Index", "Estudiante")">
+            <div class="form-group">
+                <select id="carreraId" name="carreraId" class="form-control" onchange="this.form.submit()">
+                    <option value="">--Seleccionar Carrera--</option>
+                    @if (ViewBag.Carreras != null)
+                    {
+                        foreach (var carrera in ViewBag.Carreras as List<SistemaUniversidadv1._0.Models.CARRERA>)
+                        {
+                            <option value="@carrera.id_carrera" @(carrera.id_carrera == ViewBag.SelectedCarreraId ? "selected" : "")>@carrera.nombre_carrera</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="">No hay carreras disponibles</option>
+                    }
+                </select>
+
+            </div>
+        </form>
+    </div>
+    <a href="@Url.Action("CrearEstudiante", "Estudiante")" class="btn btn-success">
+        <i class="fa-solid fa-folder-plus"></i>
+    </a>
+</div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Legajo</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Carrera</th>
+                <th>Condición Estudiante</th>
+                <th>Fecha de Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var estudiante in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => estudiante.numero_legajo)</td>
+                        <td>@Html.DisplayFor(modelItem => estudiante.nombre_estudiante)</td>
+                        <td>@Html.DisplayFor(modelItem => estudiante.apellido_estudiante)</td>
+                        <td>@Html.DisplayFor(modelItem => estudiante.dni_estudiante)</td>
+                        <td>@Html.DisplayFor(modelItem => estudiante.email_estudiante)</td>
+                        <td>@Html.DisplayFor(modelItem => estudiante.CARRERA.nombre_carrera)</td>
+                        <td>@Html.DisplayFor(modelItem => estudiante.CONDICIONESTUDIANTE.nombre_condicion_estudiante)</td>
+                        <td>@estudiante.fecha_registro_estudiante.ToShortDateString()</td>
+                        <td>
+                            @if (estudiante.estado_estudiante)
+                            {
+                                <span class="badge badge-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Inactivo</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="@Url.Action("EditarEstudiante", "Estudiante", new { id = estudiante.id_estudiante })" class="btn btn-sm btn-warning">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="@Url.Action("DetalleEstudiante", "Estudiante", new { id = estudiante.id_estudiante })" class="btn btn-sm btn-primary">
+                                    <i class="fa-solid fa-circle-info"></i> 
+                                </a>
+
+                                <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarEstudianteModal"
+                                   data-id_estudiante="@estudiante.id_estudiante" data-numero_legajo="@estudiante.numero_legajo">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10" class="text-center">Por favor seleccione una carrera para mostrar los estudiantes correspondientes.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="eliminarEstudianteModal" tabindex="-1" aria-labelledby="eliminarEstudianteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarEstudianteModalLabel">Eliminar Estudiante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Desea eliminar al estudiante <strong id="numero_legajo"></strong>?
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("EliminarEstudiante", "Estudiante", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id_Estudiante" id="id_estudiante" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var successMessage = $('.alert-success');
+            if (successMessage.length) {
+                setTimeout(function () {
+                    successMessage.fadeOut();
+                }, 5000);
+            }
+
+            $('#eliminarEstudianteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var idEstudiante = button.data('id_estudiante');
+                var numeroLegajo = button.data('numero_legajo');
+                var modal = $(this);
+                modal.find('#id_estudiante').val(idEstudiante);
+                modal.find('#numero_legajo').text(numeroLegajo);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,149 @@
+﻿@model IEnumerable<SistemaUniversidadv1._0.Models.CONDICIONUSUARIO>
+@{
+    ViewBag.Title = "Condicion de Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/index.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .alert-success, .alert-danger {
+        width: 300px;
+        margin: 10px auto;
+        text-align: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1050;
+    }
+</style>
+
+<div class="condicionusuario-container">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="header">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearCondicionUsuarioModal">
+            <i class="fa-solid fa-folder-plus"></i>
+        </button>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Condicion</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var condicionusuario in Model)
+            {
+                <tr>
+                    <td>@condicionusuario.nombre_condicion_usuario</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "sexo", new { id = condicionusuario.id_condicion_usuario })" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCondicionUsuarioModal"
+                           data-id_condicion_usuario="@condicionusuario.id_condicion_usuario" data-nombre_condicion_usuario="@condicionusuario.nombre_condicion_usuario">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para Crear Localidad -->
+<div class="modal fade" id="crearCondicionUsuarioModal" tabindex="-1" aria-labelledby="crearCondicionUsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="crearCondicionUsuarioModalLabel">Agregar Nueva Condicion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CrearCondicionUsuario", "CondicionUsuario", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        @Html.Label("Nombre de la condicion", htmlAttributes: new { @class = "form-label" })
+                        @Html.TextBox("nombre_condicion_usuario", null, new { @class = "form-control", placeholder = "Ingrese Condicion", required = "required" })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Eliminar Localidad -->
+<div class="modal fade" id="eliminarCondicionUsuarioModal" tabindex="-1" aria-labelledby="eliminarCondicionUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarCondicionUsuarioLabel">Eliminar Condicion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Desea eliminar la condicion <strong id="nombre_condicion_usuario"></strong>?
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("EliminarCondicionUsuario", "CondicionUsuario", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id_condicion_usuario" id="id_condicion_usuario" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Función para manejar el fade out de las alertas
+            function handleAlerts() {
+                var alerts = $('.alert');
+                if (alerts.length > 0) {
+                    setTimeout(function () {
+                        alerts.fadeOut('slow');
+                    }, 1000);
+                }
+            }
+
+            // Llamar a la función cuando la página carga
+            handleAlerts();
+
+            // Manejar el modal
+            $('#eliminarCondicionUsuarioModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id_condicion_usuario = button.data('id_condicion_usuario');
+                var nombre_condicion_usuario = button.data('nombre_condicion_usuario');
+
+                var modal = $(this);
+                modal.find('.modal-body #nombre_condicion_usuario').text(nombre_condicion_usuario);
+                modal.find('.modal-footer #id_condicion_usuario').val(id_condicion_usuario);
+            });
+        });
+    </script>
+}

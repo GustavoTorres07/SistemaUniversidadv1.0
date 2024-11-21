@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="207145fd69f14757a7a3cd58ff19f447" Name="Diagram1">
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.CARRERA" Width="1.5" PointX="0.75" PointY="10" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.CICLO" Width="1.5" PointX="3.75" PointY="12.125" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.CONDICIONESTUDIANTE" Width="1.5" PointX="0.75" PointY="4.5" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.CONDICIONESTUDIANTEMATERIA" Width="1.5" PointX="6" PointY="1.375" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.CONDICIONUSUARIO" Width="1.5" PointX="3.75" PointY="3" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.ESTUDIANTE" Width="1.5" PointX="3" PointY="5.5" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.ESTUDIANTEMATERIAEXAMEN" Width="1.5" PointX="8.25" PointY="1.875" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.INSCRIPCIONESTUDIANTEMATERIA" Width="1.5" PointX="8.25" PointY="6.75" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.LOCALIDAD" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.MATERIA" Width="1.5" PointX="6" PointY="11.75" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.PROFESORMATERIA" Width="1.5" PointX="8.25" PointY="10" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.ROL" Width="1.5" PointX="3.75" PointY="15.375" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.SEXO" Width="1.5" PointX="0.75" PointY="7.125" />
+        <EntityTypeShape EntityType="DBsistemaUniversidadModel.USUARIO" Width="1.5" PointX="6" PointY="5.5" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_CICLO_CARRERA" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_CARRERA" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_MATERIA_CICLO1" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_CONDICIONESTUDIANTE" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_CONDICIONESTUDIANTEMATERIA" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_USUARIO_CONDICIONUSUARIO" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_LOCALIDAD" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTE_SEXO" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_ESTUDIANTE" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_ESTUDIANTEMATERIAEXAMEN_MATERIA" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_USUARIO_LOCALIDAD" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_PROFESORMATERIA_MATERIA" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_PROFESORMATERIA_USUARIO" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_USUARIO_ROL" />
+        <AssociationConnector Association="DBsistemaUniversidadModel.FK_USUARIO_SEXO" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,188 @@
+﻿@model SistemaUniversidadv1._0.Models.EstudianteCLS
+
+@{
+    ViewBag.Title = "Crear Estudiante";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    /* Estilos personalizados para el formulario */
+    .form-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+    .form-group {
+        margin-bottom: 15px; /* Reducimos el margen entre los campos */
+    }
+
+    label {
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+    }
+
+    input.form-control, select.form-control, textarea.form-control {
+        border-radius: 5px;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+        transition: all 0.3s ease;
+        padding: 10px;
+    }
+
+        input.form-control:focus, select.form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, .25);
+        }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    .text-danger {
+        font-size: 0.85rem; /* Ajustamos el tamaño del mensaje de error */
+        color: #e3342f;
+    }
+
+    .btn {
+        border-radius: 5px;
+        padding: 8px 18px; /* Reducimos el tamaño del botón */
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .col-md-6 {
+        flex: 0 0 48%; /* Ajustamos el tamaño de las columnas para que estén más cerca */
+        padding: 0 10px;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Registrar Nuevo Estudiante</h2>
+    @using (Html.BeginForm("CrearEstudiante", "Estudiante", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.numero_legajo, "Legajo")
+                    @Html.TextBoxFor(model => model.numero_legajo, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(model => model.numero_legajo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.nombre_estudiante, "Nombre")
+                    @Html.TextBoxFor(model => model.nombre_estudiante, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.nombre_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.apellido_estudiante, "Apellido")
+                    @Html.TextBoxFor(model => model.apellido_estudiante, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.apellido_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.email_estudiante, "Email")
+                    @Html.TextBoxFor(model => model.email_estudiante, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.email_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.dni_estudiante, "DNI")
+                    @Html.TextBoxFor(model => model.dni_estudiante, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(model => model.dni_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.edad_estudiante, "Edad")
+                    @Html.TextBoxFor(model => model.edad_estudiante, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(model => model.edad_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.carrera_id, "Carrera")
+                    @Html.DropDownListFor(model => model.carrera_id, (SelectList)ViewBag.Carreras, "Seleccione una carrera", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.carrera_id, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.localidad_id, "Localidad")
+                    @Html.DropDownListFor(model => model.localidad_id, (SelectList)ViewBag.Localidades, "Seleccione una Localidad", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.localidad_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.sexo_id, "Sexo")
+                    @Html.DropDownListFor(model => model.sexo_id, (SelectList)ViewBag.Sexos, "Seleccione el sexo", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.sexo_id, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fecha_nacimiento_estudiante, "Fecha de Nacimiento")
+                    @Html.TextBoxFor(model => model.fecha_nacimiento_estudiante, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                    @Html.ValidationMessageFor(model => model.fecha_nacimiento_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.estado_estudiante, "Estado (Activo)")
+                    @Html.CheckBoxFor(model => model.estado_estudiante, new { @class = "form-check-input" })
+                    @Html.ValidationMessageFor(model => model.estado_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.celular_estudiante, "Celular")
+                    @Html.TextBoxFor(model => model.celular_estudiante, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(model => model.celular_estudiante, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.condicion_estudiante_id, "Condición del Estudiante")
+                    @Html.DropDownListFor(model => model.condicion_estudiante_id, (SelectList)ViewBag.CondicionEstudiante, "Seleccione la condición", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.condicion_estudiante_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            <input type="submit" value="Crear" class="btn btn-success" />
+            <a href="@Url.Action("Index", "Estudiante")" class="btn btn-secondary">Cancelar</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

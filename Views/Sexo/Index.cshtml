@@ -1,0 +1,149 @@
+﻿@model IEnumerable<SistemaUniversidadv1._0.Models.SEXO>
+@{
+    ViewBag.Title = "sexos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/index.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .alert-success, .alert-danger {
+        width: 300px;
+        margin: 10px auto;
+        text-align: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1050;
+    }
+</style>
+
+<div class="sexo-container">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="header">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearSexoModal">
+            <i class="fa-solid fa-folder-plus"></i>
+        </button>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Sexo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sexo in Model)
+            {
+                <tr>
+                    <td>@sexo.nombre_sexo</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "sexo", new { id = sexo.id_sexo })" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarSexoModal"
+                           data-id_sexo="@sexo.id_sexo" data-nombre_sexo="@sexo.nombre_sexo">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para Crear Localidad -->
+<div class="modal fade" id="crearSexoModal" tabindex="-1" aria-labelledby="crearSexoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="crearSexoModalLabel">Agregar Nuevo Sexo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CrearSexo", "Sexo", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        @Html.Label("Nombre del Sexo", htmlAttributes: new { @class = "form-label" })
+                        @Html.TextBox("nombre_sexo", null, new { @class = "form-control", placeholder = "Ingrese Sexo", required = "required" })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Eliminar Localidad -->
+<div class="modal fade" id="eliminarSexoModal" tabindex="-1" aria-labelledby="eliminarSexoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarSexoLabel">Eliminar Sexo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Desea eliminar el Sexo <strong id="nombre_sexo"></strong>?
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("EliminarSexo", "Sexo", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id_sexo" id="id_sexo" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Función para manejar el fade out de las alertas
+            function handleAlerts() {
+                var alerts = $('.alert');
+                if (alerts.length > 0) {
+                    setTimeout(function () {
+                        alerts.fadeOut('slow');
+                    }, 1000);
+                }
+            }
+
+            // Llamar a la función cuando la página carga
+            handleAlerts();
+
+            // Manejar el modal
+            $('#eliminarSexoModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id_sexo = button.data('id_sexo');
+                var nombre_sexo = button.data('nombre_sexo');
+
+                var modal = $(this);
+                modal.find('.modal-body #nombre_sexo').text(nombre_sexo);
+                modal.find('.modal-footer #id_sexo').val(id_sexo);
+            });
+        });
+    </script>
+}

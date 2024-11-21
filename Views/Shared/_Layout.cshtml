@@ -1,0 +1,145 @@
+﻿@using SistemaUniversidadv1._0.Helpers
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- Google Font y Boxicons CDN -->
+    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="sidebar close">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus'></i>
+            <span class="logo_name">Sistema Universidad v1.0</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="@Url.Action("Index", "Home")">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link_name">Inicio</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="@Url.Action("Index", "Home")">Inicio</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class='bx bx-collection'></i>
+                        <span class="link_name">Gestionar</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a class="link_name" href="#">Gestionar</a></li>
+                    @if (RoleHelper.UsuarioTieneRol(new[] { "Administrador" , "Profesor" }))
+                    {
+
+                        <li><a href="~/Carrera/Index">Carrera</a></li>
+                        <li><a href="~/Ciclo/Index">Ciclos</a></li>
+                        <li><a href="~/Materia/Index">Materias</a></li>
+                        <li><a href="~/Sexo/Index">Sexos</a></li>
+                        <li><a href="~/Localidad/Index">Localidades</a></li>
+                        <li><a href="~/Usuario/Index">Usuarios</a></li>
+                        <li><a href="~/Estudiante/Index">Estudiantes</a></li>
+                        <li><a href="~/ProfesorMateria/Index">Asignar Profesor a Materia</a></li>
+                        <li><a href="~/EstudianteMateriaExamen/MateriasAsignadas">Gestionar Materia</a></li>
+                        <li><a href="~/CondicionUsuario/Index">Condicion Usuario</a></li>
+                        <li><a href="~/CondicionEstudianteMateria/Index">Condicion Estudiante-Materia</a></li>
+
+                    }
+                </ul>
+            </li>
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class='bx bx-collection'></i>
+                        <span class="link_name">Asignar</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a class="link_name" href="#">Asignar</a></li>
+                    <li><a href="~/CicloMateria/Index">Materias a Ciclos</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("About", "Home")">
+                    <i class='bx bx-info-circle'></i>
+                    <span class="link_name">Acerca de</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="@Url.Action("About", "Home")">Acerca de</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("Contact", "Home")">
+                    <i class='bx bx-envelope'></i>
+                    <span class="link_name">Contacto</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="@Url.Action("Contact", "Home")">Contacto</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("CerrarSesion", "Acceso")">
+                    <i class='bx bx-log-out'></i>
+                    <span class="link_name">Cerrar Sesion</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar Sesion</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+                        <img src="/api/placeholder/52/52" alt="profile">
+                    </div>
+                    <div class="name-job">
+                        <div class="profile_name">Usuario</div>
+                        <div class="job">Administrador</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <section class="home-section">
+        <div class="home-content">
+            <i class='bx bx-menu'></i>
+            <span class="text">@ViewBag.Title</span>
+        </div>
+        <div class="container body-content">
+            @RenderBody()
+        </div>
+    </section>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        let arrow = document.querySelectorAll(".arrow");
+        for (var i = 0; i < arrow.length; i++) {
+            arrow[i].addEventListener("click", (e) => {
+                let arrowParent = e.target.parentElement.parentElement;
+                arrowParent.classList.toggle("showMenu");
+            });
+        }
+
+        let sidebar = document.querySelector(".sidebar");
+        let sidebarBtn = document.querySelector(".bx-menu");
+        sidebarBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+

@@ -1,0 +1,150 @@
+﻿/* Contenedor principal para la sección de localidades */
+.localidad-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto; /* Centrar horizontalmente */
+    text-align: center; /* Centrar el contenido */
+}
+
+.acciones {
+    display: flex; /* Mantiene los botones en línea */
+    justify-content: center; /* Centra los botones */
+}
+
+
+/* Estilos para el encabezado */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0; /* Línea debajo del encabezado */
+}
+
+    .header h2 {
+        margin: 0;
+        color: #333;
+        font-size: 28px; /* Tamaño de fuente más grande */
+    }
+
+.table {
+    width: 120%;
+    margin: 20px auto 0; /* Cambia 'auto' a un valor negativo o específico */
+    margin-left: -60px; /* Mueve la tabla 20px a la izquierda */
+    border-collapse: collapse; /* Colapsar bordes */
+
+}
+
+
+    .table th,
+    .table td {
+        padding: 15px; /* Aumentar el espaciado */
+        text-align: center; /* Centrar contenido en celdas */
+        border-bottom: 1px solid #dee2e6; /* Borde inferior en las celdas */
+
+    }
+
+    /* Encabezado de tabla */
+    .table thead th {
+        background-color: #007bff; /* Color de fondo del encabezado */
+        color: white; /* Texto en blanco */
+        font-weight: bold; /* Texto en negrita */
+        border-bottom: 2px solid #0056b3; /* Borde inferior más oscuro */
+    }
+
+    /* Efecto hover para las filas */
+    .table tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+        .table tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.1); /* Color al pasar el mouse */
+        }
+
+/* Contenedor de botones */
+.btn-container {
+    display: flex; /* Usar flexbox para alinear los botones en línea */
+    justify-content: center; /* Centrar los botones horizontalmente */
+    margin-top: 20px; /* Espaciado superior */
+
+}
+
+/* Estilo de los botones */
+.btn {
+    padding: 10px 20px; /* Aumentar el espaciado */
+    border-radius: 5px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s; /* Agregar efecto de transformación */
+    margin: 0 5px; /* Espaciado entre botones (horizontal) */
+    border: none; /* Remover bordes */
+}
+
+    .btn:hover {
+        transform: scale(1.05); /* Efecto de crecimiento al pasar el mouse */
+    }
+
+/* Estilo de los diferentes botones con colores personalizados */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.btn-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+/* Responsivo: Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .table {
+        font-size: 0.875rem; /* Reducir el tamaño de fuente en pantallas pequeñas */
+    }
+
+    .btn-container {
+        flex-direction: column; /* Cambiar a columna en móviles */
+    }
+
+    .btn {
+        margin-bottom: 10px; /* Espaciado entre botones en dispositivos móviles */
+    }
+
+    /* Asegurar que las celdas de la tabla sean más flexibles en pantallas pequeñas */
+    .table th,
+    .table td {
+        padding: 10px; /* Espaciado reducido para celdas en móviles */
+        white-space: normal; /* Permitir que el texto se ajuste */
+    }
+}

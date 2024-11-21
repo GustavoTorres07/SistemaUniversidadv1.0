@@ -1,0 +1,28 @@
+﻿@model IEnumerable<SistemaUniversidadv1._0.Models.ESTUDIANTEMATERIAEXAMEN>
+
+<h2>Exámenes de Estudiantes</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>Examen 1</th>
+            <th>Examen 2</th>
+            <th>Examen 3</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var examen in Model)
+        {
+            <tr>
+                <td>@examen.ESTUDIANTE.nombre_estudiante</td>
+                <td>@examen.examen1</td>
+                <td>@examen.examen2</td>
+                <td>@examen.examen3</td>
+                <td>
+                    <a href="@Url.Action("CalificarExamen", "EstudianteMateriaExamen", new { id = examen.id_estudiante_materia_examen })">Calificar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

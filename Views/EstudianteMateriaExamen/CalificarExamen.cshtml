@@ -1,0 +1,48 @@
+﻿@model SistemaUniversidadv1._0.Models.ESTUDIANTEMATERIAEXAMEN
+
+<h2>Calificar Examen</h2>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.id_estudiante_materia_examen)
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.examen1)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.recuperatorio_examen1)
+    </div>
+    <div>
+        <label>Examen 2:</label>
+        @Html.TextBoxFor(model => model.examen2)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.recuperatorio_examen2)
+    </div>
+    <div>
+        <label>Examen 3:</label>
+        @Html.TextBoxFor(model => model.examen3)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.recuperatorio_examen3)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.examen_final)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.examen_integrador)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.nota_final)
+    </div>
+    <div>
+        <label>Examen 1:</label>
+        @Html.TextBoxFor(model => model.condicion_estudiante_materia_id)
+    </div>
+    <button type="submit">Guardar</button>
+}

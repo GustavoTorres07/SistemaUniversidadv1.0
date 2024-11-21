@@ -1,0 +1,80 @@
+﻿@model SistemaUniversidadv1._0.Models.EstudianteCLS
+@{
+    ViewBag.Title = "Detalle del Estudiante";
+}
+
+<div class="container">
+    <div>
+
+        @Html.ActionLink(
+               "Inscribir a Materias",
+               "InscribirEstudianteMateria",
+               "InscripcionEstudianteMateria",
+               new { estudianteId = Model.id_estudiante },
+               new { @class = "btn btn-primary" }
+               )
+        
+        @Html.ActionLink(
+               "Ver Inscripciones de Materias",
+               "VerInscripciones",
+               "InscripcionEstudianteMateria",
+               new { estudianteId = Model.id_estudiante },
+               new { @class = "btn btn-warning" }
+               )
+
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header">
+            <h3>@Model.nombre_estudiante @Model.apellido_estudiante</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">N° de Legajo</dt>
+                <dd class="col-sm-9">@Model.numero_legajo</dd>
+
+                <dt class="col-sm-3">Nombre</dt>
+                <dd class="col-sm-9">@Model.nombre_estudiante</dd>
+
+                <dt class="col-sm-3">Apellido</dt>
+                <dd class="col-sm-9">@Model.apellido_estudiante</dd>
+
+                <dt class="col-sm-3">DNI</dt>
+                <dd class="col-sm-9">@Model.dni_estudiante</dd>
+
+                <dt class="col-sm-3">Fecha de Nacimiento</dt>
+                <dd class="col-sm-9">@Model.fecha_nacimiento_estudiante.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">Edad</dt>
+                <dd class="col-sm-9">@Model.edad_estudiante</dd>
+
+                <dt class="col-sm-3">Celular</dt>
+                <dd class="col-sm-9">@(Model.celular_estudiante ?? "No especificado")</dd>
+
+                <dt class="col-sm-3">Correo Electrónico</dt>
+                <dd class="col-sm-9">@(Model.email_estudiante ?? "No especificado")</dd>
+
+                <dt class="col-sm-3">Carrera</dt>
+                <dd class="col-sm-9">@(Model.CARRERA?.nombre_carrera ?? "No especificada")</dd>
+
+                <dt class="col-sm-3">Localidad</dt>
+                <dd class="col-sm-9">@(Model.LOCALIDAD?.nombre_localidad ?? "No especificada")</dd>
+
+                <dt class="col-sm-3">Sexo</dt>
+                <dd class="col-sm-9">@(Model.SEXO?.nombre_sexo ?? "No especificado")</dd>
+
+                <dt class="col-sm-3">Estado</dt>
+                <dd class="col-sm-9">@(Model.estado_estudiante ? "Activo" : "Inactivo")</dd>
+
+                <dt class="col-sm-3">Fecha de Registro</dt>
+                <dd class="col-sm-9">@Model.fecha_registro_estudiante.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">Condición</dt>
+                <dd class="col-sm-9">@(Model.CONDICIONESTUDIANTE?.nombre_condicion_estudiante ?? "No especificada")</dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>

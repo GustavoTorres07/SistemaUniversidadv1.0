@@ -1,0 +1,82 @@
+﻿@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <!-- <title>Neumorphism Login Form UI | CodingNepal</title> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/login.css">
+</head>
+<body>
+    <div class="content">
+        <div class="text">
+            SistemaUniversidadv1.0
+        </div>
+        <form action="/Acceso/Login" method="POST" class="login">
+            @Html.AntiForgeryToken()
+
+            <div class="field">
+                <input type="text" id="username" name="usuario_usuario" class="login__input" placeholder="" required>
+                <span class="fas fa-user"></span>
+                <label>Usuario</label>
+            </div>
+            <br />
+            <div class="field">
+                <input type="password" id="password" name="clave_usuario" class="login__input" placeholder="" required>
+                <span class="fas fa-lock"></span>
+                <label>Clave</label>
+            </div>
+            <button type="submit" class="button login__submit">
+                Iniciar Sesion
+            </button>
+        </form>
+    </div>
+
+    <!-- Modal de error -->
+    <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="loginErrorModalLabel">
+                        <i class="fas fa-exclamation-circle me-2"></i>Error de Inicio de Sesión
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0" id="loginErrorMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Verificar si hay un mensaje de error en TempData
+            var loginError = '@TempData["LoginError"]';
+
+            if (loginError && loginError !== '') {
+                // Decodificar el mensaje HTML si es necesario
+                loginError = loginError.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+
+                // Establecer el mensaje en el modal
+                document.getElementById('loginErrorMessage').textContent = loginError;
+
+                // Crear y mostrar el modal
+                var myModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
+                myModal.show();
+            }
+        });
+    </script>
+
+</body>
+</html>

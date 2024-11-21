@@ -1,0 +1,229 @@
+﻿@model IEnumerable<SistemaUniversidadv1._0.Models.PROFESORMATERIA>
+
+@{
+    ViewBag.Title = "Asignar Profesor a Materia";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<style>
+
+    /* Ajustar padding para hacer la tabla más compacta */
+    #MateriasTabla th, #MateriasTabla td {
+        padding: 0.05rem 0.2rem; /* Reducir más el padding */
+        font-size: 0.82rem; /* Reducir el tamaño de la fuente */
+    }
+
+    /* Limitar el ancho de las columnas y evitar desbordamientos */
+    #MateriasTabla th, #MateriasTabla td {
+        max-width: 120px; /* Reducir más el ancho máximo de las columnas */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Estilo para la fila del ciclo */
+    #MateriasTabla tr.table-secondary {
+        font-size: 12px; /* Reducir aún más el tamaño de la fuente en la fila del ciclo */
+        background-color: #f8f9fa; /* Color de fondo más suave */
+    }
+
+    /* Estilo de los botones de acción */
+    .btn-sm {
+        padding: 2px 5px; /* Reducir el padding de los botones aún más */
+        font-size: 10px; /* Reducir el tamaño de la fuente de los botones */
+    }
+
+    /* Evitar márgenes adicionales entre las filas */
+    #MateriasTabla tr {
+        margin-bottom: 0; /* Eliminar márgenes adicionales entre las filas */
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Selección de Carrera -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group ">
+                <label class="control-label"><strong>Carrera</strong></label>
+                @Html.DropDownList("Carrera_id", ViewBag.Carrera_id as SelectList, "--Seleccione una carrera--", new { @class = "form-control", id = "Carrera_id" })
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Materias -->
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered" id="MateriasTabla" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Materia</th>
+                        <th>Profesor</th>
+                        <th style="width: 150px;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se cargarán las filas de materias -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br />
+<!-- Modal para Asignar Profesor -->
+<div id="asignarProfesorModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Asignar Profesor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="asignarProfesorForm" method="post" action="@Url.Action("AsignarProfesor", "ProfesorMateria")">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <p id="materiaNombre" class="font-weight-bold"></p>
+                    <input type="hidden" name="materiaId" id="materiaId" />
+                    <div class="form-group">
+                        <label for="profesorId">Profesor:</label>
+                        <select name="profesorId" id="profesorId" class="form-control" required>
+                            <option value="">Seleccione un profesor</option>
+                            <option value="0">Sin asignar</option> <!-- Opción "Sin asignar" -->
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor seleccione un profesor
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Asignar</button>
+                    <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            var currentCarreraId = null;
+
+            // Actualiza la tabla con materias agrupadas por ciclo
+            function actualizarTabla() {
+                if (!currentCarreraId) return;
+
+                var materiasTabla = $("#MateriasTabla tbody");
+                materiasTabla.empty();
+                $("#MateriasTabla").hide();
+
+                $.getJSON('@Url.Action("GetMateriasAgrupadasPorCiclo")', { carreraId: currentCarreraId }, function (ciclos) {
+                    if (ciclos.length > 0) {
+                        ciclos.forEach(ciclo => {
+                            materiasTabla.append(`
+                                <tr class="table-secondary">
+                                    <td colspan="3" class="text-center font-weight-bold">${ciclo.Ciclo}</td>
+                                </tr>
+                            `);
+
+                            ciclo.Materias.forEach(materia => {
+                                materiasTabla.append(`
+                                    <tr>
+                                        <td>${materia.Nombre}</td>
+                                        <td class="profesor-nombre">${materia.Profesor || "Sin asignar"}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-primary btn-sm asignar-btn"
+                                                    data-materia-id="${materia.Id}"
+                                                    data-materia-nombre="${materia.Nombre}">
+                                                <i class="fas fa-user-plus mr-1"></i>
+                                                ${materia.Profesor ? 'Reasignar' : 'Asignar'}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `);
+                            });
+                        });
+                        $("#MateriasTabla").show();
+                    } else {
+                        materiasTabla.append('<tr><td colspan="3" class="text-center">No hay materias para esta carrera.</td></tr>');
+                        $("#MateriasTabla").show();
+                    }
+                });
+            }
+
+            // Actualizar la tabla cuando se seleccione una carrera
+            $("#Carrera_id").change(function () {
+                currentCarreraId = $(this).val();
+                actualizarTabla();
+            });
+
+            // Abrir el modal para asignar un profesor
+            $(document).on("click", ".asignar-btn", function () {
+                var materiaId = $(this).data("materia-id");
+                var materiaNombre = $(this).data("materia-nombre");
+
+                $("#materiaNombre").text("Materia: " + materiaNombre);
+                $("#materiaId").val(materiaId);
+
+                // Obtener los profesores disponibles
+                $.getJSON('@Url.Action("AsignarProfesorModal", "ProfesorMateria")', { materiaId: materiaId }, function (data) {
+                    var profesorSelect = $("#profesorId");
+                    profesorSelect.empty();
+                    profesorSelect.append('<option value="">Seleccione un profesor</option>');
+
+                    data.Profesores.forEach(function (profesor) {
+                        profesorSelect.append(`<option value="${profesor.Id}">${profesor.Nombre}</option>`);
+                    });
+
+                    if (data.ProfesorActual) {
+                        profesorSelect.val(data.ProfesorActual);
+                    }
+                });
+
+                $('#asignarProfesorModal').modal('show');
+            });
+
+            // Manejo de envío del formulario para asignar profesor
+            $("#asignarProfesorForm").submit(function (e) {
+                e.preventDefault();
+
+                if (!$("#profesorId").val()) {
+                    alert("Por favor seleccione un profesor");
+                    return false;
+                }
+
+                $.ajax({
+                    url: this.action,
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#asignarProfesorModal').modal('hide');
+                            actualizarTabla();
+                        } else {
+                            alert("Hubo un error al asignar el profesor.");
+                        }
+                    },
+                    error: function () {
+                        alert("Error de conexión, por favor intente nuevamente.");
+                    }
+                });
+            });
+
+            // Cerrar el modal
+            $('#btnCancelar').click(function () {
+                $('#asignarProfesorModal').modal('hide');
+            });
+
+            $('#asignarProfesorModal').on('hidden.bs.modal', function () {
+                $('#asignarProfesorForm')[0].reset();
+                $('#materiaNombre').text('');
+            });
+        });
+    </script>
+}

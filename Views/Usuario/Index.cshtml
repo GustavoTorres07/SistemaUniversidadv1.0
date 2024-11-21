@@ -1,0 +1,246 @@
+﻿@model List<SistemaUniversidadv1._0.Models.USUARIO>
+
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/index.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<style>
+    /* Estilo para el mensaje de éxito */
+    .alert-success {
+        font-size: 18px;
+        text-align: center;
+        margin: 20px auto;
+        width: 80%;
+        max-width: 600px;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    /* Estilo mejorado para el contenedor del filtro y el botón */
+    .filter-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Grupo de filtros */
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Estilo mejorado para el dropdown */
+    select.form-control {
+        min-width: 200px;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        font-size: 15px;
+        background-color: #fff;
+        transition: border-color 0.2s ease-in-out;
+    }
+
+        select.form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+    /* Estilo para los botones */
+    .btn {
+        padding: 8px 16px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            transform: translateY(-1px);
+        }
+
+    /* Mensaje cuando no hay usuarios */
+    .no-users-message {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+
+        .no-users-message i {
+            font-size: 48px;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .no-users-message p {
+            font-size: 18px;
+            color: #495057;
+            margin: 0;
+        }
+
+    /* Estilo para la tabla */
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        font-weight: bold;
+        background-color: #f8f9fa;
+    }
+
+    /* Estilo para los botones en la tabla */
+    .btn-sm {
+        font-size: 14px;
+        padding: 5px 10px;
+        margin: 0 3px;
+    }
+</style>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="filter-container">
+    <div class="filter-group">
+        @using (Html.BeginForm("Index", "Usuario", FormMethod.Get, new { @class = "d-flex align-items-center gap-3" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group mb-0">
+                @Html.DropDownList("rolId", (SelectList)ViewBag.Roles, "Seleccione un rol", new { @class = "form-control" })
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-filter me-2"></i> Filtrar
+            </button>
+        }
+    </div>
+
+    <a href="@Url.Action("CrearUsuario", "Usuario")" class="btn btn-success">
+        <i class="fa-solid fa-folder-plus me-2"></i>
+    </a>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Fecha de Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => usuario.nombre_usuario)</td>
+                    <td>@Html.DisplayFor(modelItem => usuario.apellido_usuario)</td>
+                    <td>@Html.DisplayFor(modelItem => usuario.dni_usuario)</td>
+                    <td>@Html.DisplayFor(modelItem => usuario.email_usuario)</td>
+                    <td>@Html.DisplayFor(modelItem => usuario.usuario_usuario)</td>
+                    <td>@Html.DisplayFor(modelItem => usuario.ROL.nombre_rol)</td>
+                    <td>@usuario.fecha_registro_usuario.ToShortDateString()</td>
+                    <td>
+                        @{
+                            string estado = usuario.estado_usuario ? "Activo" : "Inactivo";
+                        }
+                        @estado
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Usuario", new { id = usuario.id_usuario })" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal"
+                           data-id_usuario="@usuario.id_usuario" data-nombre_usuario="@usuario.usuario_usuario">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="no-users-message">
+        <i class="fa-solid fa-users-slash"></i>
+        <p>No hay usuarios para mostrar. Por favor, seleccione un tipo de usuario para filtrar.</p>
+    </div>
+}
+
+<!-- Modal para eliminar usuario -->
+<div class="modal fade" id="eliminarUsuarioModal" tabindex="-1" aria-labelledby="eliminarUsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarUsuarioModalLabel">Eliminar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Desea eliminar el usuario <strong id="nombre_usuario"></strong>?
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("EliminarUsuario", "Usuario", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id_Usuario" id="id_usuario" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // Mostrar mensaje de éxito y ocultarlo después de 5 segundos
+        $(document).ready(function () {
+            var successMessage = $('.alert-success');
+            if (successMessage.length) {
+                setTimeout(function () {
+                    successMessage.fadeOut('slow');
+                }, 1000);
+            }
+        });
+
+        $('#eliminarUsuarioModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id_usuario = button.data('id_usuario');
+            var nombre_usuario = button.data('nombre_usuario');
+
+            var modal = $(this);
+            modal.find('.modal-body #nombre_usuario').text(nombre_usuario);
+            modal.find('.modal-footer #id_usuario').val(id_usuario);
+        });
+    </script>
+}
+
