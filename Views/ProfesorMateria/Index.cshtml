@@ -4,6 +4,7 @@
     ViewBag.Title = "Asignar Profesor a Materia";
 }
 
+<link href="~/Content/index.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -53,6 +54,11 @@
         </div>
     </div>
 
+    <!-- Mensaje de selección de carrera -->
+    <div id="mensajeSeleccion" class="alert alert-info" role="alert">
+        Por favor, seleccione una carrera para ver las materias disponibles.
+    </div>
+
     <!-- Tabla de Materias -->
     <div class="row">
         <div class="col-12">
@@ -93,9 +99,6 @@
                             <option value="">Seleccione un profesor</option>
                             <option value="0">Sin asignar</option> <!-- Opción "Sin asignar" -->
                         </select>
-                        <div class="invalid-feedback">
-                            Por favor seleccione un profesor
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -111,119 +114,132 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        $(document).ready(function () {
-            var currentCarreraId = null;
+        $(document).ready(function () { // Ejecuta el código cuando el DOM esté completamente cargado.
+            var currentCarreraId = null; // Variable para almacenar la carrera seleccionada actualmente.
 
-            // Actualiza la tabla con materias agrupadas por ciclo
+            // Actualiza la tabla con las materias agrupadas por ciclo.
             function actualizarTabla() {
-                if (!currentCarreraId) return;
+                if (!currentCarreraId) return; // Si no hay una carrera seleccionada, no hace nada.
 
-                var materiasTabla = $("#MateriasTabla tbody");
-                materiasTabla.empty();
-                $("#MateriasTabla").hide();
+                var materiasTabla = $("#MateriasTabla tbody"); // Obtiene el cuerpo de la tabla de materias.
+                materiasTabla.empty(); // Limpia cualquier contenido existente en la tabla.
+                $("#MateriasTabla").hide(); // Oculta la tabla mientras se actualiza.
 
-                $.getJSON('@Url.Action("GetMateriasAgrupadasPorCiclo")', { carreraId: currentCarreraId }, function (ciclos) {
-                    if (ciclos.length > 0) {
-                        ciclos.forEach(ciclo => {
+                // Realiza una solicitud GET para obtener las materias agrupadas por ciclo.
+                $.getJSON('@Url.Action("MateriasAgrupadasPorCiclo")', { carreraId: currentCarreraId }, function (ciclos) {
+                    if (ciclos.length > 0) { // Si hay ciclos disponibles.
+                        ciclos.forEach(ciclo => { // Itera sobre cada ciclo.
                             materiasTabla.append(`
                                 <tr class="table-secondary">
                                     <td colspan="3" class="text-center font-weight-bold">${ciclo.Ciclo}</td>
                                 </tr>
-                            `);
+                            `); // Agrega una fila para el encabezado del ciclo.
 
-                            ciclo.Materias.forEach(materia => {
+                            ciclo.Materias.forEach(materia => { // Itera sobre las materias del ciclo.
                                 materiasTabla.append(`
                                     <tr>
-                                        <td>${materia.Nombre}</td>
-                                        <td class="profesor-nombre">${materia.Profesor || "Sin asignar"}</td>
+                                        <td>${materia.Nombre}</td> <!-- Nombre de la materia. -->
+                                        <td class="profesor-nombre">${materia.Profesor || "Sin asignar"}</td> <!-- Nombre del profesor o "Sin asignar". -->
                                         <td class="text-center">
                                             <button class="btn btn-primary btn-sm asignar-btn"
                                                     data-materia-id="${materia.Id}"
                                                     data-materia-nombre="${materia.Nombre}">
                                                 <i class="fas fa-user-plus mr-1"></i>
-                                                ${materia.Profesor ? 'Reasignar' : 'Asignar'}
+                                                ${materia.Profesor ? 'Reasignar' : 'Asignar'} <!-- Cambia el texto del botón según si hay un profesor asignado. -->
                                             </button>
                                         </td>
                                     </tr>
-                                `);
+                                `); // Agrega una fila para la materia.
                             });
                         });
-                        $("#MateriasTabla").show();
+                        $("#MateriasTabla").show(); // Muestra la tabla actualizada.
                     } else {
-                        materiasTabla.append('<tr><td colspan="3" class="text-center">No hay materias para esta carrera.</td></tr>');
-                        $("#MateriasTabla").show();
+                        materiasTabla.append('<tr><td colspan="3" class="text-center">No hay materias para esta carrera.</td></tr>'); // Mensaje si no hay materias.
+                        $("#MateriasTabla").show(); // Muestra la tabla con el mensaje.
                     }
                 });
             }
 
-            // Actualizar la tabla cuando se seleccione una carrera
+            // Actualiza la tabla cuando se selecciona una carrera.
             $("#Carrera_id").change(function () {
-                currentCarreraId = $(this).val();
-                actualizarTabla();
+                currentCarreraId = $(this).val(); // Obtiene el ID de la carrera seleccionada.
+                actualizarTabla(); // Llama a la función para actualizar la tabla.
             });
 
-            // Abrir el modal para asignar un profesor
+            // Abre el modal para asignar un profesor.
             $(document).on("click", ".asignar-btn", function () {
-                var materiaId = $(this).data("materia-id");
-                var materiaNombre = $(this).data("materia-nombre");
+                var materiaId = $(this).data("materia-id"); // Obtiene el ID de la materia.
+                var materiaNombre = $(this).data("materia-nombre"); // Obtiene el nombre de la materia.
 
-                $("#materiaNombre").text("Materia: " + materiaNombre);
-                $("#materiaId").val(materiaId);
+                $("#materiaNombre").text("Materia: " + materiaNombre); // Muestra el nombre de la materia en el modal.
+                $("#materiaId").val(materiaId); // Establece el ID de la materia en un campo oculto.
 
-                // Obtener los profesores disponibles
+                // Solicita los profesores disponibles para la materia.
                 $.getJSON('@Url.Action("AsignarProfesorModal", "ProfesorMateria")', { materiaId: materiaId }, function (data) {
-                    var profesorSelect = $("#profesorId");
-                    profesorSelect.empty();
-                    profesorSelect.append('<option value="">Seleccione un profesor</option>');
+                    var profesorSelect = $("#profesorId"); // Obtiene el elemento de selección de profesores.
+                    profesorSelect.empty(); // Limpia las opciones existentes.
+                    profesorSelect.append('<option value="">Seleccione un profesor</option>'); // Agrega la opción por defecto.
 
+                    // Agrega las opciones de los profesores disponibles.
                     data.Profesores.forEach(function (profesor) {
                         profesorSelect.append(`<option value="${profesor.Id}">${profesor.Nombre}</option>`);
                     });
 
-                    if (data.ProfesorActual) {
-                        profesorSelect.val(data.ProfesorActual);
+                    if (data.ProfesorActual) { // Si hay un profesor actualmente asignado.
+                        profesorSelect.val(data.ProfesorActual); // Selecciona al profesor actual.
                     }
                 });
 
-                $('#asignarProfesorModal').modal('show');
+                $('#asignarProfesorModal').modal('show'); // Muestra el modal.
             });
 
-            // Manejo de envío del formulario para asignar profesor
+            // Maneja el envío del formulario para asignar un profesor.
             $("#asignarProfesorForm").submit(function (e) {
-                e.preventDefault();
+                e.preventDefault(); // Evita el envío estándar del formulario.
 
-                if (!$("#profesorId").val()) {
+                if (!$("#profesorId").val()) { // Verifica que se haya seleccionado un profesor.
                     alert("Por favor seleccione un profesor");
                     return false;
                 }
 
+                // Envía el formulario mediante AJAX.
                 $.ajax({
-                    url: this.action,
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    success: function (response) {
-                        if (response.success) {
-                            $('#asignarProfesorModal').modal('hide');
-                            actualizarTabla();
+                    url: this.action, // URL del formulario.
+                    method: 'POST', // Método HTTP.
+                    data: $(this).serialize(), // Datos del formulario serializados.
+                    success: function (response) { // Maneja la respuesta del servidor.
+                        if (response.success) { // Si la asignación fue exitosa.
+                            $('#asignarProfesorModal').modal('hide'); // Oculta el modal.
+                            actualizarTabla(); // Actualiza la tabla de materias.
                         } else {
-                            alert("Hubo un error al asignar el profesor.");
+                            alert("Hubo un error al asignar el profesor."); // Muestra un mensaje de error.
                         }
                     },
-                    error: function () {
+                    error: function () { // Maneja errores de conexión.
                         alert("Error de conexión, por favor intente nuevamente.");
                     }
                 });
             });
 
-            // Cerrar el modal
+            // Cierra el modal al hacer clic en el botón de cancelar.
             $('#btnCancelar').click(function () {
-                $('#asignarProfesorModal').modal('hide');
+                $('#asignarProfesorModal').modal('hide'); // Oculta el modal.
             });
 
+            // Restablece el formulario y limpia el modal cuando se cierra.
             $('#asignarProfesorModal').on('hidden.bs.modal', function () {
-                $('#asignarProfesorForm')[0].reset();
-                $('#materiaNombre').text('');
+                $('#asignarProfesorForm')[0].reset(); // Reinicia el formulario.
+                $('#materiaNombre').text(''); // Limpia el texto del nombre de la materia.
             });
+
+            $("#Carrera_id").change(function () {
+                currentCarreraId = $(this).val();
+                if (currentCarreraId) {
+                    $("#mensajeSeleccion").hide(); // Oculta el mensaje al seleccionar una carrera válida
+                    actualizarTabla();
+                }
+            });
+
         });
     </script>
 }

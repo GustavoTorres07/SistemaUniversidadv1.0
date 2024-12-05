@@ -1,0 +1,57 @@
+﻿@* MateriasAsignadas.cshtml *@
+@model List<SistemaUniversidadv1._0.Models.ViewModels.MateriaInscripcionViewModel>
+@{
+    ViewBag.Title = "Materias a su Cargo";
+}
+
+<!-- Filtro de carrera -->
+@using (Html.BeginForm("MateriasAsignadas", "Profesor", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="carreraId">Filtrar por carrera</label>
+        @Html.DropDownList("carreraId", (SelectList)ViewBag.Carreras, "Seleccione una carrera", new { @class = "form-control" })
+        <button type="submit" class="btn btn-primary mt-2">Filtrar</button>
+    </div>
+}
+
+@if (!ViewBag.CarreraSeleccionada)
+{
+    <div class="alert alert-info mt-3">
+        Por favor, seleccione una carrera para mostrar las materias que tiene a su cargo.
+    </div>
+}
+else if (!Model.Any())
+{
+    <div class="alert alert-warning mt-3">
+        No se encontraron materias asignadas para la carrera seleccionada.
+    </div>
+}
+else
+{
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Materia</th>
+                <th>Carrera</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var materia in Model)
+            {
+                <tr>
+                    <td>@materia.codigo_materia</td>
+                    <td>@materia.NombreMateria</td>
+                    <td>@materia.nombre_carrera</td>
+                    <td>
+                        <a href="@Url.Action("EstudiantesPorMateria", "Profesor", new { idMateria = materia.MateriaId })"
+                           class="btn btn-primary">
+                            Ver Estudiantes
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

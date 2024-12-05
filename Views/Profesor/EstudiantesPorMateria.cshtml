@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SistemaUniversidadv1._0.Models.ESTUDIANTE>
+@{
+    var materia = ViewBag.Materia as SistemaUniversidadv1._0.Models.ViewModels.MateriaSeleccionadaViewModel;
+}
+
+<h2>Estudiantes Inscritos en @materia.NombreMateria</h2>
+<p>Código de Materia: @materia.codigo_materia</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Correo Electrónico</th>
+            <th>Acciones</th>  <!-- Nueva columna para las acciones -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var estudiante in Model)
+        {
+            <tr>
+                <td>@estudiante.id_estudiante</td>
+                <td>@estudiante.nombre_estudiante</td>
+                <td>@estudiante.email_estudiante</td>
+                <td>
+                    <a href="@Url.Action("CalificarExamen", "EstudianteMateriaExamen", new { estudiante_id = estudiante.id_estudiante, materia_id = materia.MateriaId})" class="btn btn-info">
+                        Clasificar Exámenes
+                    </a>
+                    <a href="@Url.Action("VerCalificaciones", "EstudianteMateriaExamen",
+      new { estudiante_id = estudiante.id_estudiante, materia_id = materia.MateriaId})"
+                       class="btn btn-primary">
+                        Ver Calificaciones
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<a href="@Url.Action("MateriasAsignadas", "Profesor", new { materia_id = materia.MateriaId })" class="btn btn-secondary">
+    <i class="fas fa-arrow-left me-2"></i>Volver a la Vista de Estudiantes
+</a>

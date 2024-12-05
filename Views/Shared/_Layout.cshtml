@@ -39,9 +39,8 @@
                 </div>
                 <ul class="sub-menu">
                     <li><a class="link_name" href="#">Gestionar</a></li>
-                    @if (RoleHelper.UsuarioTieneRol(new[] { "Administrador" , "Profesor" }))
+                    @if (RoleHelper.UsuarioTieneRol(new[] { "Administrador" }))
                     {
-
                         <li><a href="~/Carrera/Index">Carrera</a></li>
                         <li><a href="~/Ciclo/Index">Ciclos</a></li>
                         <li><a href="~/Materia/Index">Materias</a></li>
@@ -50,42 +49,41 @@
                         <li><a href="~/Usuario/Index">Usuarios</a></li>
                         <li><a href="~/Estudiante/Index">Estudiantes</a></li>
                         <li><a href="~/ProfesorMateria/Index">Asignar Profesor a Materia</a></li>
-                        <li><a href="~/EstudianteMateriaExamen/MateriasAsignadas">Gestionar Materia</a></li>
+                        <li><a href="~/Profesor/MateriasAsignadas">Gestionar Materia</a></li>
                         <li><a href="~/CondicionUsuario/Index">Condicion Usuario</a></li>
+                        <li><a href="~/CondicionEstudiante/Index">Condicion Estudiante</a></li>
                         <li><a href="~/CondicionEstudianteMateria/Index">Condicion Estudiante-Materia</a></li>
+
+                    }
+                    @if (RoleHelper.UsuarioTieneRol(new[] { "Auxiliar" }))
+                    {
+
+                        <li><a href="~/Estudiante/Index">Estudiantes</a></li>
+                        <li><a href="~/Ciclo/Index">Ciclos</a></li>
+                        <li><a href="~/Carrera/Index">Carrera</a></li>
+                        <li><a href="~/Materia/Index">Materias</a></li>
+                        <li><a href="~/ProfesorMateria/Index">Asignar Profesor a Materia</a></li>
+                        <li><a href="~/Profesor/MateriasAsignadas">Gestionar Materia</a></li>
+                        <li><a href="~/CondicionEstudianteMateria/Index">Condicion Estudiante-Materia</a></li>
+
+                    }
+
+
+                    @if (RoleHelper.UsuarioTieneRol(new[] { "Profesor" }))
+                    {
+                        <li><a href="~/Materia/Index">Materias</a></li>
+                        <li><a href="~/Profesor/MateriasAsignadas">Gestionar Materia</a></li>
 
                     }
                 </ul>
             </li>
             <li>
-                <div class="iocn-link">
-                    <a href="#">
-                        <i class='bx bx-collection'></i>
-                        <span class="link_name">Asignar</span>
-                    </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
-                </div>
-                <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Asignar</a></li>
-                    <li><a href="~/CicloMateria/Index">Materias a Ciclos</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="@Url.Action("About", "Home")">
-                    <i class='bx bx-info-circle'></i>
-                    <span class="link_name">Acerca de</span>
-                </a>
-                <ul class="sub-menu blank">
-                    <li><a class="link_name" href="@Url.Action("About", "Home")">Acerca de</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="@Url.Action("Contact", "Home")">
+                <a href="@Url.Action("#", "#")">
                     <i class='bx bx-envelope'></i>
-                    <span class="link_name">Contacto</span>
+                    <span class="link_name">Notificaciones</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="@Url.Action("Contact", "Home")">Contacto</a></li>
+                    <li><a class="link_name" href="@Url.Action("#", "#")">Notificaciones</a></li>
                 </ul>
             </li>
             <li>
@@ -100,11 +98,10 @@
             <li>
                 <div class="profile-details">
                     <div class="profile-content">
-                        <img src="/api/placeholder/52/52" alt="profile">
                     </div>
                     <div class="name-job">
-                        <div class="profile_name">Usuario</div>
-                        <div class="job">Administrador</div>
+                        <div class="profile_name">Usuario: @Session["usuario_usuario"]</div>
+                        <div class="job">Rol: @Session["nombre_rol"]</div>
                     </div>
                 </div>
             </li>

@@ -74,7 +74,13 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("EditarCarrera", "Carrera", new { id = carrera.id_carrera })" class="btn btn-sm btn-warning">
+                        <a href="javascript:void(0);"
+                           class="btn btn-sm btn-warning"
+                           data-bs-toggle="modal"
+                           data-bs-target="#editarCarreraModal"
+                           data-id_carrera="@carrera.id_carrera"
+                           data-nombre_carrera="@carrera.nombre_carrera"
+                           data-estado_carrera="@carrera.estado_carrera.ToString().ToLower()">
                             <i class="fa-solid fa-pen"></i>
                         </a>
                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCarreraModal"
@@ -123,55 +129,115 @@
     </div>
 </div>
 
-<!-- Modal para Eliminar Carrera -->
-<div class="modal fade" id="eliminarCarreraModal" tabindex="-1" aria-labelledby="eliminarCarreraModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal para Editar Carrera -->
+<div class="modal fade" id="editarCarreraModal" tabindex="-1" aria-labelledby="editarCarreraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="eliminarCarreraModalLabel">Eliminar Carrera</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editarCarreraModalLabel">Editar Carrera</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ¿Desea eliminar la Carrera <strong id="nombre_carrera"></strong>?
-            </div>
-            <div class="modal-footer">
-                @using (Html.BeginForm("EliminarCarrera", "Carrera", FormMethod.Post))
+                @using (Html.BeginForm("EditarCarrera", "Carrera", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="id_carrera" id="id_carrera" />
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <input type="hidden" id="edit_id_carrera" name="id_carrera" />
+                    <div class="mb-3">
+                        @Html.Label("Nombre de la Carrera", htmlAttributes: new { @class = "form-label" })
+                        @Html.TextBox("nombre_carrera", null, new { @class = "form-control", id = "editar_nombre_carrera", placeholder = "Ingrese Carrera", required = "required" })
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estado de la Carrera</label>
+                        <select name="estado_carrera" id="editar_estado_carrera" class="form-control" required>
+                            <option value="">Seleccione estado</option>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Actualizar</button>
+                    </div>
                 }
             </div>
         </div>
     </div>
 </div>
 
-@section scripts {
+
+<!-- Modal para Eliminar Carrera -->
+<div class="modal fade" id="eliminarCarreraModal" tabindex="-1" aria-labelledby="eliminarCarreraModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="eliminarCarreraModalLabel">Eliminar Carrera</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="mensaje-eliminacion">
+                    ¿Desea eliminar la Carrera <strong id="nombre_carrera"></strong>?
+                </div>
+                <div id="mensaje-error" class="text-danger" style="display:none;">
+                    No se puede eliminar esta carrera porque tiene estudiantes inscritos.
+                </div>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("EliminarCarrera", "Carrera", FormMethod.Post, new { id = "form-eliminar-carrera" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="id_carrera" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="btn-eliminar" class="btn btn-danger" disabled>Eliminar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
     <script>
         $(document).ready(function () {
-            // Función para manejar el fade out de las alertas
+            // Función para manejar la desaparición de las alertas automáticamente.
             function handleAlerts() {
-                var alerts = $('.alert');
-                if (alerts.length > 0) {
-                    setTimeout(function () {
-                        alerts.fadeOut('slow');
-                    }, 1000);
+                var alerts = $('.alert'); // Selecciona todas las alertas presentes en la página.
+                if (alerts.length > 0) { // Si existen alertas:
+                    setTimeout(function () { // Configura un temporizador:
+                        alerts.fadeOut('slow'); // Desvanece las alertas lentamente.
+                    }, 1000); // Tiempo de espera antes de desvanecer (1 segundo).
                 }
             }
 
-            // Llamar a la función cuando la página carga
-            handleAlerts();
+            // Llama a la función de manejo de alertas al cargar la página.
+            handleAlerts(); // Asegura que cualquier alerta visible se desvanezca automáticamente.
 
+            // Evento para mostrar el modal de eliminar carrera.
             $('#eliminarCarreraModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var id_carrera = button.data('id_carrera');
-                var nombre_carrera = button.data('nombre_carrera');
+                var button = $(event.relatedTarget); // Obtiene el botón que activó el modal.
+                var id_carrera = button.data('id_carrera'); // Extrae el ID de la carrera del atributo `data-id_carrera`.
+                var nombre_carrera = button.data('nombre_carrera'); // Extrae el nombre de la carrera del atributo `data-nombre_carrera`.
+                var modal = $(this); // Hace referencia al modal que se está mostrando.
 
-                var modal = $(this);
-                modal.find('.modal-body #nombre_carrera').text(nombre_carrera);
-                modal.find('.modal-footer #id_carrera').val(id_carrera);
+                // Configura los valores en el modal.
+                modal.find('.modal-body #nombre_carrera').text(nombre_carrera); // Establece el nombre de la carrera en el modal.
+                modal.find('.modal-footer #id_carrera').val(id_carrera); // Establece el ID de la carrera en un campo oculto.
+
+                // Oculta cualquier mensaje de error previo.
+                modal.find('#mensaje-error').hide(); // Asegura que el mensaje de error no sea visible.
+                modal.find('#mensaje-eliminacion').show(); // Muestra el mensaje de confirmación de eliminación.
+                modal.find('#btn-eliminar').prop('disabled', false); // Habilita el botón de eliminar.
+
+                // Verifica si la carrera tiene estudiantes asociados.
+                $.getJSON('/Carrera/VerificarEstudiantesEnCarrera', { id_carrera: id_carrera }, function (tieneEstudiantes) {
+                    if (tieneEstudiantes) { // Si hay estudiantes asociados:
+                        modal.find('#mensaje-eliminacion').hide(); // Oculta el mensaje de confirmación.
+                        modal.find('#mensaje-error').show(); // Muestra el mensaje de error indicando que no se puede eliminar.
+                        modal.find('#btn-eliminar').prop('disabled', true); // Deshabilita el botón de eliminar.
+                    }
+                });
             });
         });
     </script>
 }
+

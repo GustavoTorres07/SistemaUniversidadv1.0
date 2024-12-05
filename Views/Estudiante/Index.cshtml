@@ -46,36 +46,42 @@
             @TempData["SuccessMessage"]
         </div>
     }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
 
 
-<div class="header">
-    <!-- Formulario para filtrar estudiantes por carrera -->
-    <div class="filter-container">
-        <form method="get" action="@Url.Action("Index", "Estudiante")">
-            <div class="form-group">
-                <select id="carreraId" name="carreraId" class="form-control" onchange="this.form.submit()">
-                    <option value="">--Seleccionar Carrera--</option>
-                    @if (ViewBag.Carreras != null)
-                    {
-                        foreach (var carrera in ViewBag.Carreras as List<SistemaUniversidadv1._0.Models.CARRERA>)
+    <div class="header">
+        <!-- Formulario para filtrar estudiantes por carrera -->
+        <div class="filter-container">
+            <form method="get" action="@Url.Action("Index", "Estudiante")">
+                <div class="form-group">
+                    <select id="carreraId" name="carreraId" class="form-control" onchange="this.form.submit()">
+                        <option value="">--Seleccionar Carrera--</option>
+                        @if (ViewBag.Carreras != null)
                         {
-                            <option value="@carrera.id_carrera" @(carrera.id_carrera == ViewBag.SelectedCarreraId ? "selected" : "")>@carrera.nombre_carrera</option>
+                            foreach (var carrera in ViewBag.Carreras as List<SistemaUniversidadv1._0.Models.CARRERA>)
+                            {
+                                <option value="@carrera.id_carrera" @(carrera.id_carrera == ViewBag.SelectedCarreraId ? "selected" : "")>@carrera.nombre_carrera</option>
+                            }
                         }
-                    }
-                    else
-                    {
-                        <option value="">No hay carreras disponibles</option>
-                    }
-                </select>
+                        else
+                        {
+                            <option value="">No hay carreras disponibles</option>
+                        }
+                    </select>
 
-            </div>
-        </form>
+                </div>
+            </form>
+        </div>
+        <a href="@Url.Action("CrearEstudiante", "Estudiante")" class="btn btn-success">
+            <i class="fa-solid fa-folder-plus"></i>
+        </a>
     </div>
-    <a href="@Url.Action("CrearEstudiante", "Estudiante")" class="btn btn-success">
-        <i class="fa-solid fa-folder-plus"></i>
-    </a>
-</div>
 
     <table class="table table-hover">
         <thead>
@@ -118,11 +124,8 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a href="@Url.Action("EditarEstudiante", "Estudiante", new { id = estudiante.id_estudiante })" class="btn btn-sm btn-warning">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
                                 <a href="@Url.Action("DetalleEstudiante", "Estudiante", new { id = estudiante.id_estudiante })" class="btn btn-sm btn-primary">
-                                    <i class="fa-solid fa-circle-info"></i> 
+                                    <i class="fa-solid fa-circle-info"></i>
                                 </a>
 
                                 <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarEstudianteModal"
@@ -176,7 +179,15 @@
             if (successMessage.length) {
                 setTimeout(function () {
                     successMessage.fadeOut();
-                }, 5000);
+                }, 3000);
+            }
+
+            // Ocultar mensajes de error después de unos segundos
+            var errorMessage = $('.alert-danger');
+            if (errorMessage.length) {
+                setTimeout(function () {
+                    errorMessage.fadeOut();
+                }, 3000);
             }
 
             $('#eliminarEstudianteModal').on('show.bs.modal', function (event) {

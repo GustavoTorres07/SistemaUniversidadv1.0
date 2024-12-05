@@ -1,0 +1,174 @@
+﻿@model SistemaUniversidadv1._0.Models.ESTUDIANTEMATERIAEXAMEN
+@{
+    ViewBag.Title = "Registro Académico - Calificaciones";
+}
+
+<style>
+    .academic-header {
+        background: linear-gradient(to right, #1a237e, #283593);
+        color: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .student-info {
+        background-color: #f8f9fa;
+        border-left: 4px solid #1a237e;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        border-radius: 0.25rem;
+    }
+
+    .grades-card {
+        border: none;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .grades-header {
+        background: linear-gradient(to right, #283593, #3949ab);
+        color: white;
+        padding: 1rem;
+        font-weight: 500;
+    }
+
+    .grades-table th,
+    .grades-table td {
+        text-align: center;
+        padding: 0.75rem; /* Reduce padding */
+    }
+
+    .grades-table th {
+        font-size: 0.85rem; /* Ajustar tamaño */
+        background-color: #e8eaf6;
+        color: #1a237e;
+    }
+
+    .grades-table td.grade-cell {
+        white-space: nowrap; /* Asegura que el texto esté en una sola línea */
+    }
+
+    .evaluation-row:hover {
+        background-color: #f9f9f9;
+    }
+
+    .grades-table {
+        border-collapse: collapse; /* Junta las celdas */
+    }
+
+        .grades-table td,
+        .grades-table th {
+            border: 1px solid #ddd; /* Añade bordes suaves */
+        }
+
+            .grades-table th:nth-child(3) {
+                min-width: 150px; /* Ajusta el mínimo ancho de la columna "Recuperatorio" */
+                max-width: 200px; /* Limita el ancho máximo de la columna "Recuperatorio" */
+                word-wrap: break-word; /* Permite que el texto se ajuste y no se recorte */
+                font-size: 0.9rem; /* Ajusta el tamaño del texto en el encabezado */
+            }
+
+    .back-button {
+        background-color: #1a237e;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-top: 1.5rem;
+    }
+
+        .back-button:hover {
+            background-color: #283593;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+</style>
+
+<div class="container py-4">
+    <div class="academic-header">
+        <h2 class="mb-0">Registro Académico de Calificaciones</h2>
+        <p class="mb-0 mt-2 text-light">@Model.ESTUDIANTE.CARRERA.nombre_carrera</p>
+        <p class="text-white">Período Académico 2024</p>
+    </div>
+
+    <div class="student-info">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Información del Estudiante</h5>
+                <p class="mb-1"><strong>N° De Legajo:</strong> @Model.ESTUDIANTE.numero_legajo</p>
+                <p class="mb-1"><strong>Nombre:</strong> @Model.ESTUDIANTE.nombre_estudiante</p>
+                <p class="mb-1"><strong>Apellido:</strong> @Model.ESTUDIANTE.apellido_estudiante</p>
+                <p class="mb-1"><strong>Dni:</strong> @Model.ESTUDIANTE.dni_estudiante</p>
+                <p class="mb-0"><strong>Email:</strong> @Model.ESTUDIANTE.email_estudiante</p>
+                <p class="mb-0"><strong>Condicion:</strong> @Model.ESTUDIANTE.CONDICIONESTUDIANTE.nombre_condicion_estudiante</p>
+            </div>
+            <div class="col-md-6">
+                <h5>Información de la Materia</h5>
+                <p class="mb-1"><strong>Código:</strong> @Model.MATERIA.codigo_materia</p>
+                <p class="mb-1"><strong>Correlativas:</strong> @Model.MATERIA.correlativa_materia</p>
+                <p class="mb-1"><strong>Materia:</strong> @Model.MATERIA.nombre_materia</p>
+                <p class="mb-1"><strong>Condicion:</strong> @Model.CONDICIONESTUDIANTEMATERIA.nombre_condicion</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grades-card">
+        <div class="grades-header">
+            <h4 class="mb-0">Detalle de Calificaciones</h4>
+        </div>
+        <div class="card-body p-0">
+            <table class="table grades-table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 40%">Evaluación</th>
+                        <th style="width: 25%">Calificación</th> <!-- Ancho reducido -->
+                        <th style="width: 35%">Recuperatorio</th> <!-- Ancho reducido -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="evaluation-row">
+                        <td>Primer Parcial</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen1) ? "-" : Model.examen1)</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.recuperatorio_examen1) ? "-" : Model.recuperatorio_examen1)</td>
+                    </tr>
+                    <tr class="evaluation-row">
+                        <td>Segundo Parcial</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen2) ? "-" : Model.examen2)</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.recuperatorio_examen2) ? "-" : Model.recuperatorio_examen2)</td>
+                    </tr>
+                    <tr class="evaluation-row">
+                        <td>Tercer Parcial</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen3) ? "-" : Model.examen3)</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.recuperatorio_examen3) ? "-" : Model.recuperatorio_examen3)</td>
+                    </tr>
+                    <tr class="evaluation-row">
+                        <td>Examen Final</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen_final) ? "-" : Model.examen_final)</td>
+                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen_integrador) ? "-" : Model.examen_integrador)</td>
+                    </tr>
+                    <tr class="evaluation-row">
+                        <td><strong>Nota Final:</strong></td>
+                        <td colspan="2">@(!string.IsNullOrEmpty(Model.nota_final) ? Model.nota_final : "-")</td>
+                    </tr>
+                    <tr class="evaluation-row">
+                        <td><strong>Condición de la Materia:</strong></td>
+                        <td colspan="2">@Model.CONDICIONESTUDIANTEMATERIA.nombre_condicion</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-end">
+        <a href="@Url.Action("EstudiantesPorMateria", "Profesor", new { idMateria = Model.materia_id })"
+           class="back-button">
+            <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+        </a>
+    </div>
+</div>

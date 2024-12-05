@@ -1,107 +1,105 @@
-﻿using SistemaUniversidadv1._0.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using BCrypt.Net; // Asegúrate de incluir esta línea
+﻿using SistemaUniversidadv1._0.Models; 
+using System; 
+using System.Collections.Generic; 
+using System.Linq; // Proporciona funcionalidad para consultas LINQ.
+using System.Web; 
+using System.Web.Mvc; 
+using BCrypt.Net; // Biblioteca para trabajar con hashing seguro de contraseñas.
+using SistemaUniversidadv1._0.Filtros; // Importa un filtro personalizado para la autenticación.
 
-namespace SistemaUniversidadv1._0.Controllers
+namespace SistemaUniversidadv1._0.Controllers 
 {
-    public class UsuarioController : Controller
+    [CustomAuthorize("Administrador")] // Restringe el acceso a este controlador únicamente a usuarios con rol "Administrador".
+    public class UsuarioController : Controller 
     {
-        private UniversidadContext db = new UniversidadContext(); // El contexto de la base de datos
+        private UniversidadContext db = new UniversidadContext(); 
 
-
-        public ActionResult Index(int? rolId = null)
+        // Método para mostrar la lista de usuarios.
+        public ActionResult Index(int? rolId = null) // Recibe opcionalmente un id de rol para filtrar usuarios.
         {
             try
             {
-                // Obtener todos los roles y enviarlos a la vista para el dropdown
+                // Carga los roles en un SelectList para usarlo en la vista.
                 ViewBag.Roles = new SelectList(db.ROL, "id_rol", "nombre_rol");
 
-                // Inicializar la lista de usuarios como vacía si no se ha seleccionado un rol
+                // Inicializa la consulta para obtener usuarios.
                 IQueryable<USUARIO> usuarios = db.USUARIO;
 
-                // Si rolId tiene un valor, filtra los usuarios por rol
+                // Si se proporciona un ID de rol, filtra los usuarios por ese rol.
                 if (rolId.HasValue)
                 {
                     usuarios = usuarios.Where(u => u.rol_id == rolId.Value);
                 }
                 else
                 {
-                    usuarios = usuarios.Where(u => false);  // No mostrar usuarios si no hay filtro
+                    usuarios = usuarios.Where(u => false); // Evita mostrar usuarios si no hay filtro.
                 }
 
+                // Retorna la vista con la lista de usuarios.
                 return View(usuarios.ToList());
             }
-            catch (Exception ex)
+            catch (Exception ex) // Maneja errores al cargar usuarios.
             {
+                // Almacena un mensaje de error para mostrar en la vista.
                 ViewBag.ErrorMessage = "Ocurrió un error al cargar los usuarios. " + ex.Message;
+                // Retorna una lista vacía para evitar errores en la vista.
                 return View(new List<USUARIO>());
             }
         }
 
-
-
-
-
-        // Acción para crear un nuevo usuario - Muestra el formulario
+        // Método GET para mostrar el formulario de creación de usuario.
+        [HttpGet]
         public ActionResult CrearUsuario()
         {
             try
             {
-                db.Configuration.ProxyCreationEnabled = false; // Desactiva los proxies dinámicos
+                db.Configuration.ProxyCreationEnabled = false; // Desactiva proxies dinámicos para evitar errores en las vistas.
 
-                ViewBag.roles = db.ROL.ToList(); // Obtiene la lista de roles para mostrar en el formulario
+                // Carga los datos necesarios para el formulario.
+                ViewBag.roles = db.ROL.ToList();
                 ViewBag.Sexos = db.SEXO.ToList();
-                ViewBag.localidades = db.LOCALIDAD.ToList(); // Obtiene la lista de localidades para mostrar en el formulario
-                ViewBag.condicionusuario = db.CONDICIONUSUARIO.ToList(); // Obtiene la lista de condicionusuario para mostrar en el formulario
+                ViewBag.localidades = db.LOCALIDAD.ToList();
+                ViewBag.condicionusuario = db.CONDICIONUSUARIO.ToList();
 
-                return View();
+                return View(); // Retorna la vista del formulario.
             }
-            catch (Exception ex)
+            catch (Exception ex) // Maneja errores al cargar el formulario.
             {
-                // Manejo del error
                 ViewBag.ErrorMessage = "Ocurrió un error al cargar el formulario de creación. " + ex.Message;
-                return View(); // Retorna la vista con un mensaje de error
+                return View(); // Retorna la vista con un mensaje de error.
             }
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CrearUsuario(UsuarioCLS usuarioCLS)
+        // Método POST para guardar un nuevo usuario.
+        [HttpPost] 
+        [ValidateAntiForgeryToken] 
+        public ActionResult CrearUsuario(UsuarioCLS usuarioCLS) // Recibe un modelo con los datos del usuario.
         {
             try
             {
-                // Verificar si el modelo es válido
-                if (ModelState.IsValid)
+                if (ModelState.IsValid) // Verifica que el modelo sea válido.
                 {
-                    // Verificar duplicados para DNI, email y nombre de usuario
+                    // Verifica duplicados en DNI, email y nombre de usuario.
                     if (db.USUARIO.Any(u => u.dni_usuario == usuarioCLS.dni_usuario))
                     {
                         ModelState.AddModelError("dni_usuario", "Ya existe un usuario con el mismo DNI.");
-                        // Recargar los ViewBag necesarios
-                        CargarViewBags();
-                        return View(usuarioCLS);
+                        CargarViewBags(); // Recarga datos necesarios para la vista.
+                        return View(usuarioCLS); // Retorna al formulario con errores.
                     }
                     if (db.USUARIO.Any(u => u.email_usuario == usuarioCLS.email_usuario))
                     {
                         ModelState.AddModelError("email_usuario", "Ya existe un usuario con el mismo correo electrónico.");
-                        // Recargar los ViewBag necesarios
                         CargarViewBags();
                         return View(usuarioCLS);
                     }
                     if (db.USUARIO.Any(u => u.usuario_usuario == usuarioCLS.usuario_usuario))
                     {
                         ModelState.AddModelError("usuario_usuario", "Ya existe un usuario con el mismo nombre de usuario.");
-                        // Recargar los ViewBag necesarios
                         CargarViewBags();
                         return View(usuarioCLS);
                     }
 
-                    // Crear una nueva entidad de usuario a partir del modelo recibido
+                    // Crea una nueva instancia de usuario con los datos del modelo.
                     var usuario = new USUARIO
                     {
                         nombre_usuario = usuarioCLS.nombre_usuario,
@@ -117,30 +115,28 @@ namespace SistemaUniversidadv1._0.Controllers
                         condicion_usuario_id = usuarioCLS.condicion_usuario_id,
                         usuario_usuario = usuarioCLS.usuario_usuario,
                         estado_usuario = usuarioCLS.estado_usuario,
-                        clave_usuario = BCrypt.Net.BCrypt.HashPassword(usuarioCLS.clave_usuario),
+                        clave_usuario = BCrypt.Net.BCrypt.HashPassword(usuarioCLS.clave_usuario), // Hashea la contraseña.
                         rol_id = usuarioCLS.rol_id
                     };
 
-                    db.USUARIO.Add(usuario);
-                    db.SaveChanges();
+                    db.USUARIO.Add(usuario); // Agrega el usuario a la base de datos.
+                    db.SaveChanges(); // Guarda los cambios.
 
-                    return RedirectToAction("Index", new { rolId = usuario.rol_id });
+                    return RedirectToAction("Index", new { rolId = usuario.rol_id }); // Redirige al índice.
                 }
 
-                // Si el ModelState no es válido, recargar los ViewBag
-                CargarViewBags();
+                CargarViewBags(); // Si el modelo no es válido, recarga datos necesarios.
                 return View(usuarioCLS);
             }
-            catch (Exception)
+            catch (Exception) // Maneja errores durante la creación del usuario.
             {
                 TempData["SuccessMessage"] = "El usuario se creó correctamente.";
-                // Recargar los ViewBag en caso de error
                 CargarViewBags();
-                return View(usuarioCLS);
+                return View(usuarioCLS); // Retorna al formulario con errores.
             }
         }
 
-        // Método privado para cargar los ViewBag
+        // Método privado para recargar datos de la vista.
         private void CargarViewBags()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -150,45 +146,33 @@ namespace SistemaUniversidadv1._0.Controllers
             ViewBag.condicionusuario = db.CONDICIONUSUARIO.ToList();
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EliminarUsuario(int id_Usuario)
         {
             try
             {
-                // Obtener el usuario a eliminar de la base de datos
-                USUARIO usuario = db.USUARIO.Find(id_Usuario);
+                USUARIO usuario = db.USUARIO.Find(id_Usuario); // Busca el usuario por ID.
 
-                // Si el usuario no existe, retornar un error 404
-                if (usuario == null)
+                if (usuario == null) // Verifica si el usuario no existe.
                 {
-                    return HttpNotFound();
+                    TempData["ErrorMessage"] = "El usuario no existe o ya ha sido eliminado.";
+                    return RedirectToAction("Index");
                 }
 
-                // Eliminar el usuario de la base de datos
-                db.USUARIO.Remove(usuario);
+                db.USUARIO.Remove(usuario); // Intenta eliminar el usuario.
+                db.SaveChanges(); // Guarda los cambios.
 
-                // Guardar los cambios en la base de datos
-                db.SaveChanges();
-
-                // Almacenar un mensaje de éxito en TempData
-                TempData["SuccessMessage"] = "El usuario se eliminó correctamente.";
-
-                // Redirigir al índice después de eliminar el usuario exitosamente
+                TempData["SuccessMessage"] = "El usuario se eliminó correctamente."; // Mensaje de éxito.
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception) // Maneja errores durante la eliminación.
             {
-                // Manejar cualquier excepción y agregar el mensaje de error al modelo
-                ModelState.AddModelError("", "Error al eliminar el usuario: " + ex.Message);
-
-                // Redireccionar al índice sin filtrado (puedes modificar esto si deseas filtrar)
+                TempData["ErrorMessage"] = "Error al eliminar el usuario. " +
+                    "Asegúrese de que no esté asignado en una o mas materia.";
                 return RedirectToAction("Index");
             }
         }
-
 
     }
 }

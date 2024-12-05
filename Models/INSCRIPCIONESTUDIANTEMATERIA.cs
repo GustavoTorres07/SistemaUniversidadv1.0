@@ -17,7 +17,7 @@ namespace SistemaUniversidadv1._0.Models
         public int id_inscripcion_estudiante_materia { get; set; }
         public int estudiante_id { get; set; }
         public int materia_id { get; set; }
-        public bool estado_inscripcion { get; set; }
+        public Nullable<bool> estado_inscripcion { get; set; }
         public Nullable<System.DateTime> fecha_inscripcion_estudiante_materia { get; set; }
     
         public virtual ESTUDIANTE ESTUDIANTE { get; set; }

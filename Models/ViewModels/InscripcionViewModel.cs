@@ -34,6 +34,13 @@ namespace SistemaUniversidadv1._0.Models.ViewModels
         public CARRERA Carrera { get; set; } // Agregar si falta
         public string codigo_materia { get; set; }
 
+        // Nueva propiedad para almacenar las materias seleccionadas
+        public List<int> MateriasSeleccionadas { get; set; }
+
+        public ListadoInscripcionesViewModel()
+        {
+            MateriasSeleccionadas = new List<int>();
+        }
 
     }
 
@@ -50,7 +57,17 @@ namespace SistemaUniversidadv1._0.Models.ViewModels
         public int MateriaId { get; set; }
         public string NombreMateria { get; set; }
         public string Estado { get; set; }
+
+        public bool EstaSeleccionada { get; set; } // Cambiar el nombre si es necesario
+
+        public string nombre_carrera { get; set; } // Nueva propiedad para la carrera
+
+        public int carrera_id { get; set; } // Nueva propiedad para la carrera
+
+
         public string codigo_materia { get; set; } // Asegúrate de que esta propiedad exista
         public DateTime? FechaInscripcion { get; set; }  // Mantener la fecha de inscripción
     }
+
+
 }

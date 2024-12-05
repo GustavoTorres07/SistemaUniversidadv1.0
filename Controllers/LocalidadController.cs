@@ -1,4 +1,5 @@
-﻿using SistemaUniversidadv1._0.Models;
+﻿using SistemaUniversidadv1._0.Filtros;
+using SistemaUniversidadv1._0.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Web.Mvc;
 
 namespace SistemaUniversidadv1._0.Controllers
 {
+    [CustomAuthorize("Administrador")]
     public class LocalidadController : Controller
     {
         private UniversidadContext db = new UniversidadContext();
@@ -18,6 +20,7 @@ namespace SistemaUniversidadv1._0.Controllers
         }
 
         // GET: Localidad/Crear
+        [HttpGet]
         public ActionResult CrearLocalidad()
         {
             return View();

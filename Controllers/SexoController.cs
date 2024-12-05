@@ -104,10 +104,8 @@ namespace SistemaUniversidadv1._0.Controllers
             }
             catch (Exception ex)
             {
-                // Manejar cualquier excepción y agregar el mensaje de error al modelo
-                ModelState.AddModelError("", "Error al eliminar el Sexo: " + ex.Message);
-
-                // Redireccionar al índice
+                // Capturar el mensaje de error y pasarlo a TempData
+                TempData["Error"] = "Error al eliminar el sexo: " + ex.Message;
                 return RedirectToAction("Index");
             }
         }

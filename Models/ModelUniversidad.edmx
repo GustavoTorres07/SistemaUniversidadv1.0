@@ -88,7 +88,7 @@
           <Property Name="id_inscripcion_estudiante_materia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="estudiante_id" Type="int" Nullable="false" />
           <Property Name="materia_id" Type="int" Nullable="false" />
-          <Property Name="estado_inscripcion" Type="bit" Nullable="false" />
+          <Property Name="estado_inscripcion" Type="bit" />
           <Property Name="fecha_inscripcion_estudiante_materia" Type="date" />
         </EntityType>
         <EntityType Name="LOCALIDAD">
@@ -626,7 +626,7 @@
           <Property Name="id_inscripcion_estudiante_materia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="estudiante_id" Type="Int32" Nullable="false" />
           <Property Name="materia_id" Type="Int32" Nullable="false" />
-          <Property Name="estado_inscripcion" Type="Boolean" Nullable="false" />
+          <Property Name="estado_inscripcion" Type="Boolean" />
           <Property Name="fecha_inscripcion_estudiante_materia" Type="DateTime" Precision="0" />
           <NavigationProperty Name="ESTUDIANTE" Relationship="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_ESTUDIANTE" FromRole="INSCRIPCIONESTUDIANTEMATERIA" ToRole="ESTUDIANTE" />
           <NavigationProperty Name="MATERIA" Relationship="DBsistemaUniversidadModel.FK_INSCRIPCIONESTUDIANTEMATERIA_MATERIA" FromRole="INSCRIPCIONESTUDIANTEMATERIA" ToRole="MATERIA" />

@@ -104,10 +104,10 @@ namespace SistemaUniversidadv1._0.Controllers
                 // Redirigir al índice después de eliminar la localidad exitosamente
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Manejar cualquier excepción y agregar el mensaje de error al modelo
-                ModelState.AddModelError("", "Error al eliminar la condicion: " + ex.Message);
+                // Almacenar el mensaje de error en TempData
+                TempData["Error"] = "Error al eliminar la condición. Puede que esté en uso o haya ocurrido otro problema.";
 
                 // Redireccionar al índice
                 return RedirectToAction("Index");

@@ -54,9 +54,6 @@
                 <tr>
                     <td>@condicionusuario.nombre_condicion_usuario</td>
                     <td>
-                        <a href="@Url.Action("Edit", "sexo", new { id = condicionusuario.id_condicion_usuario })" class="btn btn-sm btn-warning">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCondicionUsuarioModal"
                            data-id_condicion_usuario="@condicionusuario.id_condicion_usuario" data-nombre_condicion_usuario="@condicionusuario.nombre_condicion_usuario">
                             <i class="fa-solid fa-trash"></i>

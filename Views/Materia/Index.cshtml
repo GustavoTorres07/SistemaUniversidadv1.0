@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
 
 
 
@@ -62,7 +62,6 @@
         max-width: 650px; /* Reduce el ancho máximo */
         margin-left: auto;
         margin-right: auto;
-
     }
 
     .table td, .table th {
@@ -251,100 +250,100 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            var carreraSeleccionadaId = null;
+            var carreraSeleccionadaId = null; // Almacena el ID de la carrera seleccionada.
 
-            // Mostrar el botón de creación de materia y cargar las materias al seleccionar una carrera
+            // Mostrar el botón de creación de materia y cargar las materias al seleccionar una carrera.
             $('#carrera_id').change(function () {
-                carreraSeleccionadaId = $(this).val();
+                carreraSeleccionadaId = $(this).val(); // Obtiene el ID de la carrera seleccionada.
 
-                if (carreraSeleccionadaId) {
-                    $('#btnCrearMateria').show();
-                    $('#btnDescargarPDF').show();  // Mostrar el botón de PDF al seleccionar carrera
-                    $('thead').show();
-                    $('#carrera_id_modal').val(carreraSeleccionadaId);
-                    $('#nombreCarrera').text($('#carrera_id option:selected').text());
+                if (carreraSeleccionadaId) { // Si hay una carrera seleccionada:
+                    $('#btnCrearMateria').show(); // Muestra el botón para crear materias.
+                    $('#btnDescargarPDF').show(); // Muestra el botón para descargar el PDF.
+                    $('thead').show(); // Muestra el encabezado de la tabla.
+                    $('#carrera_id_modal').val(carreraSeleccionadaId); // Establece el ID de la carrera en el modal.
+                    $('#nombreCarrera').text($('#carrera_id option:selected').text()); // Muestra el nombre de la carrera seleccionada.
 
-                    cargarMaterias();
-                } else {
-                    $('#btnCrearMateria').hide();
-                    $('thead').hide();
-                    $('#nombreCarrera').text('');
-                    mostrarMensajeInicial();
+                    cargarMaterias(); // Llama a la función para cargar las materias de la carrera seleccionada.
+                } else { // Si no hay carrera seleccionada:
+                    $('#btnCrearMateria').hide(); // Oculta el botón de crear materias.
+                    $('thead').hide(); // Oculta el encabezado de la tabla.
+                    $('#nombreCarrera').text(''); // Limpia el nombre de la carrera.
+                    mostrarMensajeInicial(); // Muestra un mensaje inicial.
                 }
             });
 
-            // Evento para cargar ciclos al mostrar el modal de creación de materia
+            // Evento para cargar ciclos al mostrar el modal de creación de materia.
             $('#crearMateriaModal').on('show.bs.modal', function () {
-                cargarCiclos();
+                cargarCiclos(); // Llama a la función para cargar los ciclos de la carrera seleccionada.
             });
 
-            // Función para cargar los ciclos de la carrera seleccionada
+            // Función para cargar los ciclos de la carrera seleccionada.
             function cargarCiclos() {
-                var carreraId = $('#carrera_id').val();
+                var carreraId = $('#carrera_id').val(); // Obtiene el ID de la carrera seleccionada.
                 $.ajax({
-                    url: '@Url.Action("CargarCiclosPorCarrera")',
-                    type: 'GET',
-                    data: { carreraId: carreraId },
-                    success: function (ciclos) {
-                        var select = $('#ciclo_id');
-                        select.empty();
-                        select.append('<option value="">Seleccione un ciclo</option>');
-                        ciclos.forEach(function (ciclo) {
+                    url: '@Url.Action("CargarCiclosPorCarrera")', // URL para obtener los ciclos.
+                    type: 'GET', // Método HTTP GET.
+                    data: { carreraId: carreraId }, // Parámetro de la solicitud.
+                    success: function (ciclos) { // Si la solicitud tiene éxito:
+                        var select = $('#ciclo_id'); // Selecciona el elemento del dropdown de ciclos.
+                        select.empty(); // Limpia las opciones anteriores.
+                        select.append('<option value="">Seleccione un ciclo</option>'); // Agrega una opción inicial.
+                        ciclos.forEach(function (ciclo) { // Agrega cada ciclo al dropdown.
                             select.append(`<option value="${ciclo.id_ciclo}">${ciclo.nombre_ciclo}</option>`);
                         });
                     },
-                    error: function () {
-                        mostrarAlerta('Error al cargar los ciclos', 'alert-danger');
+                    error: function () { // Si ocurre un error:
+                        mostrarAlerta('Error al cargar los ciclos', 'alert-danger'); // Muestra un mensaje de error.
                     }
                 });
             }
 
-            // Limpiar el formulario de creación de materia al cerrar el modal
+            // Limpiar el formulario de creación de materia al cerrar el modal.
             $('#crearMateriaModal').on('hidden.bs.modal', function () {
-                $('#crearMateriaForm')[0].reset();
-                $('#crearMateriaForm .is-invalid').removeClass('is-invalid');
+                $('#crearMateriaForm')[0].reset(); // Reinicia el formulario.
+                $('#crearMateriaForm .is-invalid').removeClass('is-invalid'); // Remueve los estilos de error.
             });
 
-            // Función para cargar materias de la carrera seleccionada
+            // Función para cargar materias de la carrera seleccionada.
             function cargarMaterias() {
                 $.ajax({
-                    url: '@Url.Action("ObtenerMateriasPorCarrera")',
-                    type: 'GET',
-                    data: { carreraId: carreraSeleccionadaId },
-                    success: function (materias) {
-                        actualizarTablaMaterias(materias);
+                    url: '@Url.Action("ObtenerMateriasPorCarrera")', // URL para obtener las materias.
+                    type: 'GET', // Método HTTP GET.
+                    data: { carreraId: carreraSeleccionadaId }, // Parámetro de la solicitud.
+                    success: function (materias) { // Si la solicitud tiene éxito:
+                        actualizarTablaMaterias(materias); // Llama a la función para actualizar la tabla.
                     },
-                    error: function () {
-                        mostrarAlerta('Error al cargar las materias', 'alert-danger');
+                    error: function () { // Si ocurre un error:
+                        mostrarAlerta('Error al cargar las materias', 'alert-danger'); // Muestra un mensaje de error.
                     }
                 });
             }
 
-            // Actualizar la tabla con las materias por ciclo
+            // Actualizar la tabla con las materias por ciclo.
             function actualizarTablaMaterias(materias) {
-                var tbody = $('#tablaMaterias tbody');
-                tbody.empty();
+                var tbody = $('#tablaMaterias tbody'); // Selecciona el cuerpo de la tabla.
+                tbody.empty(); // Limpia las filas anteriores.
 
-                if (materias && materias.length > 0) {
-                    var materiasPorCiclo = {};
+                if (materias && materias.length > 0) { // Si hay materias:
+                    var materiasPorCiclo = {}; // Objeto para agrupar materias por ciclo.
 
-                    materias.forEach(function (materia) {
+                    materias.forEach(function (materia) { // Agrupa materias por nombre de ciclo.
                         if (!materiasPorCiclo[materia.nombre_ciclo]) {
                             materiasPorCiclo[materia.nombre_ciclo] = [];
                         }
                         materiasPorCiclo[materia.nombre_ciclo].push(materia);
                     });
 
-                    Object.keys(materiasPorCiclo).sort().forEach(function (cicloNombre) {
-                        tbody.append(
+                    Object.keys(materiasPorCiclo).sort().forEach(function (cicloNombre) { // Ordena los ciclos alfabéticamente.
+                        tbody.append( // Agrega el encabezado del ciclo.
                             `<tr class="ciclo-header">
                                 <td colspan="4">${cicloNombre}</td>
                             </tr>`
                         );
 
                         materiasPorCiclo[cicloNombre]
-                            .sort((a, b) => a.codigo_materia.localeCompare(b.codigo_materia))
-                            .forEach(function (materia) {
+                            .sort((a, b) => a.codigo_materia.localeCompare(b.codigo_materia)) // Ordena las materias por código.
+                            .forEach(function (materia) { // Agrega cada materia como fila.
                                 tbody.append(`
                                     <tr>
                                         <td>${materia.codigo_materia}</td>
@@ -359,12 +358,12 @@
                                 `);
                             });
                     });
-                } else {
-                    mostrarMensajeInicial();
+                } else { // Si no hay materias:
+                    mostrarMensajeInicial(); // Muestra un mensaje inicial.
                 }
             }
 
-            // Mostrar mensaje inicial cuando no hay materias para la carrera seleccionada
+            // Mostrar mensaje inicial cuando no hay materias para la carrera seleccionada.
             function mostrarMensajeInicial() {
                 $('#tablaMaterias tbody').html(`
                     <tr id="mensajeInicial">
@@ -375,112 +374,98 @@
                 `);
             }
 
-            // Manejar la creación de materia a través del formulario
+            // Manejar la creación de materia a través del formulario.
             $('#crearMateriaForm').submit(function (event) {
-                event.preventDefault();
-                if (validarFormulario()) {
+                event.preventDefault(); // Evita el envío predeterminado del formulario.
+                if (validarFormulario()) { // Valida el formulario antes de enviarlo.
                     $.ajax({
-                        url: '@Url.Action("CrearMateria")',
-                        type: 'POST',
-                        data: $(this).serialize(),
-                        success: function () {
-                            $('#crearMateriaModal').modal('hide');
-                            cargarMaterias();
-                            mostrarAlerta('Materia creada exitosamente', 'alert-success');
+                        url: '@Url.Action("CrearMateria")', // URL para crear la materia.
+                        type: 'POST', // Método HTTP POST.
+                        data: $(this).serialize(), // Serializa los datos del formulario.
+                        success: function () { // Si la solicitud tiene éxito:
+                            $('#crearMateriaModal').modal('hide'); // Cierra el modal.
+                            cargarMaterias(); // Recarga las materias.
+                            mostrarAlerta('Materia creada exitosamente', 'alert-success'); // Muestra un mensaje de éxito.
                         },
-                        error: function () {
-                            mostrarAlerta('Error al crear la materia', 'alert-danger');
+                        error: function () { // Si ocurre un error:
+                            mostrarAlerta('Error al crear la materia', 'alert-danger'); // Muestra un mensaje de error.
                         }
                     });
                 }
             });
 
-            // Configurar la eliminación de materia en el modal de confirmación
+            // Configurar la eliminación de materia en el modal de confirmación.
             $('#eliminarMateriaModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var materiaId = button.data('id');
-                var materiaNombre = button.data('nombre');
+                var button = $(event.relatedTarget); // Botón que disparó el evento.
+                var materiaId = button.data('id'); // Obtiene el ID de la materia a eliminar.
+                var materiaNombre = button.data('nombre'); // Obtiene el nombre de la materia.
 
-                $('#idMateriaEliminar').val(materiaId);
-                $('#nombreMateriaEliminar').text(materiaNombre);
+                $('#idMateriaEliminar').val(materiaId); // Asigna el ID al campo oculto.
+                $('#nombreMateriaEliminar').text(materiaNombre); // Muestra el nombre de la materia en el modal.
             });
 
-            // Enviar la solicitud de eliminación de materia
+            // Enviar la solicitud de eliminación de materia.
             $('#formEliminarMateria').submit(function (event) {
-                event.preventDefault();
+                event.preventDefault(); // Evita el envío predeterminado del formulario.
 
-                var materiaId = $('#idMateriaEliminar').val();
-                var token = $('input[name="__RequestVerificationToken"]', this).val();
+                var materiaId = $('#idMateriaEliminar').val(); // Obtiene el ID de la materia a eliminar.
+                var token = $('input[name="__RequestVerificationToken"]', this).val(); // Obtiene el token CSRF.
 
                 $.ajax({
-                    url: '@Url.Action("EliminarMateria")',
-                    type: 'POST',
+                    url: '@Url.Action("EliminarMateria")', // URL para eliminar la materia.
+                    type: 'POST', // Método HTTP POST.
                     data: {
                         id_materia: materiaId,
                         __RequestVerificationToken: token
                     },
-                    success: function (response) {
+                    success: function (response) { // Si la solicitud tiene éxito:
                         if (response.success) {
-                            $('#eliminarMateriaModal').modal('hide');
-                            cargarMaterias();
-                            mostrarAlerta('Materia eliminada correctamente', 'alert-success');
+                            $('#eliminarMateriaModal').modal('hide'); // Cierra el modal.
+                            cargarMaterias(); // Recarga las materias.
+                            mostrarAlerta('Materia eliminada correctamente', 'alert-success'); // Muestra un mensaje de éxito.
                         } else {
-                            mostrarAlerta(response.message || 'Error al eliminar la materia', 'alert-danger');
+                            mostrarAlerta(response.message || 'Error al eliminar la materia', 'alert-danger'); // Muestra un mensaje de error.
                         }
                     },
-                    error: function () {
-                        mostrarAlerta('Error al eliminar la materia', 'alert-danger');
+                    error: function () { // Si ocurre un error:
+                        mostrarAlerta('Error al eliminar la materia', 'alert-danger'); // Muestra un mensaje de error.
                     }
                 });
             });
 
-            // Validar el formulario de creación de materia
-            function validarFormulario() {
-                var isValid = true;
-                $('#crearMateriaForm [required]').each(function () {
-                    if ($(this).val() === '') {
-                        $(this).addClass('is-invalid');
-                        isValid = false;
+            // Validar el formulario de creación de materia.
+
+
+ function validarFormulario() {
+                var esValido = true;
+
+                $('#crearMateriaForm .form-control').each(function () {
+                    var valor = $(this).val().trim(); // Obtiene el valor del campo.
+                    if (!valor) { // Si está vacío:
+                        $(this).addClass('is-invalid'); // Agrega el estilo de error.
+                        esValido = false; // Marca el formulario como inválido.
                     } else {
-                        $(this).removeClass('is-invalid');
+                        $(this).removeClass('is-invalid'); // Remueve el estilo de error si es válido.
                     }
                 });
-                return isValid;
+
+                return esValido; // Retorna si el formulario es válido o no.
             }
 
-            // Mostrar una alerta temporal
-            function mostrarAlerta(mensaje, tipo) {
-                var alerta = $('<div class="alert ' + tipo + '">' + mensaje + '</div>');
-                $('body').append(alerta);
-                setTimeout(function () {
-                    alerta.fadeOut(function () {
-                        $(this).remove();
-                    });
-                }, 3000);
+            // Mostrar una alerta personalizada.
+            function mostrarAlerta(mensaje, claseAlerta) {
+                var alerta = $('#alerta'); // Selecciona el contenedor de la alerta.
+                alerta.removeClass('alert-success alert-danger').addClass(claseAlerta); // Aplica la clase de la alerta.
+                alerta.text(mensaje).fadeIn(); // Muestra el mensaje.
+                setTimeout(function () { alerta.fadeOut(); }, 4000); // Oculta la alerta después de 4 segundos.
             }
 
-            // Mostrar el botón de descarga de PDF al seleccionar una carrera
-            $('#carrera_id').change(function () {
-                if ($(this).val()) {
-                    $('#btnDescargarPDF').show();
-                } else {
-                    $('#btnDescargarPDF').hide();
-                }
-            });
-
-            // Función para descargar el PDF de las materias de la carrera seleccionada
-            function descargarPDF() {
-                var carreraId = $('#carrera_id').val();
-                if (carreraId) {
-                    window.location.href = '@Url.Action("GenerarPDFMaterias", "Materia")' + '?carreraId=' + carreraId;
-                }
-            }
-
-            // Configurar el botón de descarga de PDF
-            $('#btnDescargarPDF').click(function () {
-                descargarPDF();
-            });
+            // Ocultar el encabezado y botones inicialmente.
+            $('thead').hide();
+            $('#btnCrearMateria').hide();
+            $('#btnDescargarPDF').hide();
         });
     </script>
 }
+
 

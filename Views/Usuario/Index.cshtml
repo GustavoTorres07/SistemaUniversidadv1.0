@@ -121,6 +121,12 @@
         @TempData["SuccessMessage"]
     </div>
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <div class="filter-container">
     <div class="filter-group">
@@ -175,9 +181,6 @@
                         @estado
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit", "Usuario", new { id = usuario.id_usuario })" class="btn btn-sm btn-warning">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal"
                            data-id_usuario="@usuario.id_usuario" data-nombre_usuario="@usuario.usuario_usuario">
                             <i class="fa-solid fa-trash"></i>
@@ -222,16 +225,16 @@ else
 
 @section scripts {
     <script>
-        // Mostrar mensaje de éxito y ocultarlo después de 5 segundos
         $(document).ready(function () {
             var successMessage = $('.alert-success');
-            if (successMessage.length) {
+            var errorMessage = $('.alert-danger');
+            if (successMessage.length || errorMessage.length) {
                 setTimeout(function () {
                     successMessage.fadeOut('slow');
-                }, 1000);
+                    errorMessage.fadeOut('slow');
+                }, 5000);
             }
         });
-
         $('#eliminarUsuarioModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var id_usuario = button.data('id_usuario');

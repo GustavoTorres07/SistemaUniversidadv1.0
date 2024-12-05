@@ -45,7 +45,7 @@
     <div class="header mb-3">
         @Html.DropDownList("carrera_id", new SelectList(ViewBag.Carreras, "id_carrera", "nombre_carrera"), "Seleccione Carrera", new { @class = "form-select", onchange = "filtrarCiclosPorCarrera(this)" })
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearCicloModal">
-            <i class="fa-solid fa-folder-plus"></i> Crear Ciclo
+            <i class="fa-solid fa-folder-plus"></i>
         </button>
     </div>
 
@@ -75,9 +75,6 @@
                     <tr>
                         <td>@ciclo.nombre_ciclo</td>
                         <td>
-                            <a href="@Url.Action("Edit", "Ciclo", new { id = ciclo.id_ciclo })" class="btn btn-sm btn-warning">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
                             <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCicloModal" data-id_ciclo="@ciclo.id_ciclo" data-nombre_ciclo="@ciclo.nombre_ciclo">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
@@ -148,22 +145,24 @@
         let successAlert = document.getElementById("alertSuccess");
         let errorAlert = document.getElementById("alertError");
         if (successAlert) {
-            successAlert.style.opacity = "0";
-            setTimeout(() => { successAlert.remove(); }, 500);
+            successAlert.style.opacity = "0";  // Establece la opacidad de la alerta de éxito a 0 para hacerla invisible.
+            setTimeout(() => { successAlert.remove(); }, 500); // Después de 500ms, elimina el elemento del DOM.
         }
         if (errorAlert) {
-            errorAlert.style.opacity = "0";
-            setTimeout(() => { errorAlert.remove(); }, 500);
+            errorAlert.style.opacity = "0";  // Establece la opacidad de la alerta de error a 0 para hacerla invisible.
+            setTimeout(() => { errorAlert.remove(); }, 500); // Después de 500ms, elimina el elemento del DOM.
         }
-    }, 3000);
+    }, 3000);  // Este bloque de código se ejecuta después de 3 segundos.
 
     // Filtro de ciclos por carrera
     function filtrarCiclosPorCarrera(select) {
-        let carreraId = select.value;
+        let carreraId = select.value;  // Obtiene el valor del select (el id de la carrera seleccionada).
         if (carreraId) {
             window.location.href = '@Url.Action("Index", "Ciclo")?carrera_id=' + carreraId;
+            // Si hay un id de carrera seleccionado, redirige a la acción "Index" del controlador "Ciclo", pasando el id de la carrera.
         } else {
             window.location.href = '@Url.Action("Index", "Ciclo")';
+            // Si no hay un id de carrera seleccionado, simplemente redirige a la acción "Index" sin ningún parámetro.
         }
     }
 
@@ -171,15 +170,20 @@
     document.addEventListener('DOMContentLoaded', function () {
         var eliminarCicloModal = document.getElementById('eliminarCicloModal');
         eliminarCicloModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var idCiclo = button.getAttribute('data-id_ciclo');
-            var nombreCiclo = button.getAttribute('data-nombre_ciclo');
+            var button = event.relatedTarget;  // Obtiene el botón que activó el modal.
+            var idCiclo = button.getAttribute('data-id_ciclo');  // Obtiene el id del ciclo del atributo 'data-id_ciclo' del botón.
+            var nombreCiclo = button.getAttribute('data-nombre_ciclo');  // Obtiene el nombre del ciclo del atributo 'data-nombre_ciclo' del botón.
 
-            var modalInputId = eliminarCicloModal.querySelector('#id_ciclo');
-            var modalCicloName = eliminarCicloModal.querySelector('#nombre_ciclo_text');
+            var modalInputId = eliminarCicloModal.querySelector('#id_ciclo');  // Selecciona el campo de entrada del modal donde se mostrará el ID del ciclo.
+            var modalCicloName = eliminarCicloModal.querySelector('#nombre_ciclo_text');  // Selecciona el campo donde se mostrará el nombre del ciclo.
 
-            modalInputId.value = idCiclo;
-            modalCicloName.textContent = nombreCiclo;
+            modalInputId.value = idCiclo;  // Establece el valor del campo de entrada con el id del ciclo.
+            modalCicloName.textContent = nombreCiclo;  // Muestra el nombre del ciclo en el modal.
         });
     });
+
+    //Aqui no se utiliza Ajax, lo que se hace es redirigir al usuario a una url con parametros carrera_id usando 
+    //window.location.href en el metodo filtrarCIclosPorCarrera, se recarga la pagina completa. 
+
 </script>
+

@@ -1,135 +1,148 @@
-﻿using SistemaUniversidadv1._0.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Linq;  // Importa el espacio de nombres para LINQ, que se utiliza para consultas a bases de datos.
+using System.Data.Entity;  // Importa el espacio de nombres para trabajar con Entity Framework.
+using System.Web.Mvc;  
+using SistemaUniversidadv1._0.Models;  // Importa el espacio de nombres donde se encuentran los modelos de la aplicación.
+using SistemaUniversidadv1._0.Filtros;  // Importa los filtros personalizados, como el de autorización.
 
-namespace SistemaUniversidadv1._0.Controllers
+namespace SistemaUniversidadv1._0.Controllers  // Define el espacio de nombres de los controladores.
 {
-    public class EstudianteMateriaExamenController : Controller
+    [CustomAuthorize("Profesor")]  // Aplica un filtro de autorización personalizado para asegurar que solo los "Profesor" puedan acceder a esta clase.
+    public class EstudianteMateriaExamenController : Controller  
     {
-        private UniversidadContext db = new UniversidadContext(); // El contexto de la base de datos
+        private readonly UniversidadContext db = new UniversidadContext();  // Instancia el contexto de base de datos para interactuar con la base de datos.
 
-        // Validar si el usuario tiene rol de profesor
-        private bool UsuarioEsProfesor()
+        // Acción GET para calificar un examen
+        [HttpGet]
+        public ActionResult CalificarExamen(int? estudiante_id, int? materia_id)  // Método para manejar la solicitud GET de calificar un examen.
         {
-            // Validar que la sesión tiene el ID del usuario y el rol
-            if (Session["UsuarioId"] == null || Session["rol_id"] == null)
+            if (estudiante_id == null || materia_id == null)  // Verifica si los parámetros son nulos.
             {
-                return false; // Si no hay usuario o rol en la sesión, no es profesor
+                return new HttpStatusCodeResult(400, "Faltan parámetros.");  // Si faltan parámetros, retorna un error 400.
             }
 
-            int rolId = (int)Session["rol_id"];
-            return rolId == 3; // Asumimos que el rol de "Profesor" tiene id = 1
+            // Buscar el examen existente para el estudiante y la materia especificados.
+            var examenExistente = db.ESTUDIANTEMATERIAEXAMEN
+                .Include(e => e.ESTUDIANTE)  // Incluye la información del estudiante asociado.
+                .FirstOrDefault(e => e.estudiante_id == estudiante_id && e.materia_id == materia_id);  // Busca el examen por los IDs del estudiante y la materia.
+
+            if (examenExistente == null)  // Si no existe el examen, lo crea.
+            {
+                // Crear un nuevo objeto examen con valores predeterminados.
+                examenExistente = new ESTUDIANTEMATERIAEXAMEN
+                {
+                    estudiante_id = estudiante_id.Value,
+                    materia_id = materia_id.Value,
+                    condicion_estudiante_materia_id = 1, // Asigna el valor predeterminado de condición.
+                    examen1 = "", // Inicializa las calificaciones vacías.
+                    examen2 = "",
+                    examen3 = "",
+                    examen_final = "",
+                    examen_integrador = "",
+                    nota_final = ""
+                };
+
+                // Guarda el nuevo examen en la base de datos.
+                db.ESTUDIANTEMATERIAEXAMEN.Add(examenExistente);
+                db.SaveChanges();
+            }
+
+            // Obtiene la lista de condiciones para el dropdown en la vista.
+            ViewBag.Condiciones = db.CONDICIONESTUDIANTEMATERIA
+                .Select(c => new SelectListItem  // Crea una lista de elementos seleccionables con valores y textos.
+                {
+                    Value = c.id_condicion_estudiante_materia.ToString(),  // Asigna el ID de la condición.
+                    Text = c.nombre_condicion  // Asigna el nombre de la condición como texto.
+                }).ToList();  // Convierte la lista en un objeto lista.
+
+            return View(examenExistente);  // Retorna la vista para mostrar o editar el examen del estudiante.
         }
 
-        // Listar las materias asignadas al profesor logueado
-        public ActionResult MateriasAsignadas()
-        {
-            if (!UsuarioEsProfesor()) // Verificar si el usuario es profesor
-            {
-                return RedirectToAction("Login", "Acceso"); // Redirigir a la página de login si no es profesor
-            }
-
-            int usuarioId = (int)Session["UsuarioId"]; // Obtener usuario logueado
-
-            var materias = db.PROFESORMATERIA
-                               .Where(pm => pm.usuario_id == usuarioId)
-                               .Select(pm => pm.MATERIA)
-                               .ToList();
-
-            return View(materias); // Pasar las materias a la vista
-        }
-
-        // Listar exámenes de estudiantes de una materia
-        public ActionResult ExamenesPorMateria(int materiaId)
-        {
-            if (!UsuarioEsProfesor()) // Verificar si el usuario es profesor
-            {
-                return RedirectToAction("Login", "Acceso"); // Redirigir a la página de login si no es profesor
-            }
-
-            int usuarioId = (int)Session["UsuarioId"]; // Obtener usuario logueado
-
-            // Verificar que el profesor tenga acceso a esta materia
-            bool tieneAcceso = db.PROFESORMATERIA
-                                   .Any(pm => pm.usuario_id == usuarioId && pm.materia_id == materiaId);
-
-            if (!tieneAcceso)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "No tiene acceso a esta materia.");
-            }
-
-            // Obtener los exámenes de la materia
-            var examenes = db.ESTUDIANTEMATERIAEXAMEN
-                               .Where(eme => eme.materia_id == materiaId)
-                               .Include(eme => eme.ESTUDIANTE) // Opcional, si deseas incluir información del estudiante
-                               .ToList();
-
-            return View(examenes); // Pasar los exámenes a la vista
-        }
-
-        // GET: Mostrar formulario para calificar un examen
-        public ActionResult CalificarExamen(int id)
-        {
-            if (!UsuarioEsProfesor()) // Verificar si el usuario es profesor
-            {
-                return RedirectToAction("Login", "Acceso"); // Redirigir a la página de login si no es profesor
-            }
-
-            var examen = db.ESTUDIANTEMATERIAEXAMEN
-                                 .FirstOrDefault(eme => eme.id_estudiante_materia_examen == id);
-
-            if (examen == null)
-            {
-                return HttpNotFound("Examen no encontrado.");
-            }
-
-            return View(examen); // Pasar el examen a la vista para calificación
-        }
-
-        // POST: Guardar las calificaciones del examen
+        // Acción POST para calificar el examen
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CalificarExamen(ESTUDIANTEMATERIAEXAMEN examenActualizado)
+        [ValidateAntiForgeryToken]  // Protege contra ataques CSRF (Cross-Site Request Forgery).
+        public ActionResult CalificarExamen(ESTUDIANTEMATERIAEXAMEN modelo)  // Método para manejar la solicitud POST de calificar un examen.
         {
-            if (!UsuarioEsProfesor()) // Verificar si el usuario es profesor
+            if (!ModelState.IsValid)  // Si el modelo no es válido (por ejemplo, si las calificaciones no cumplen las reglas).
             {
-                return RedirectToAction("Login", "Acceso"); // Redirigir a la página de login si no es profesor
+                // Vuelve a cargar las condiciones para el dropdown en caso de que el modelo no sea válido.
+                ViewBag.Condiciones = db.CONDICIONESTUDIANTEMATERIA
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.id_condicion_estudiante_materia.ToString(),
+                        Text = c.nombre_condicion
+                    }).ToList();
+
+                return View(modelo);  // Devuelve la vista con el modelo actual para corregir cualquier error.
             }
 
-            if (!ModelState.IsValid)
+            // Buscar el examen en la base de datos usando el ID del examen.
+            var examenExistente = db.ESTUDIANTEMATERIAEXAMEN
+                .FirstOrDefault(e => e.id_estudiante_materia_examen == modelo.id_estudiante_materia_examen);
+
+            if (examenExistente == null)  // Si no se encuentra el examen, muestra un error.
             {
-                return View(examenActualizado); // Retornar con errores de validación
+                return HttpNotFound();  // Retorna un error 404 si no se encuentra el examen.
             }
 
-            var examen = db.ESTUDIANTEMATERIAEXAMEN
-                                 .FirstOrDefault(eme => eme.id_estudiante_materia_examen == examenActualizado.id_estudiante_materia_examen);
+            // Actualiza los campos del examen con los valores enviados en el modelo.
+            examenExistente.examen1 = modelo.examen1;
+            examenExistente.recuperatorio_examen1 = modelo.recuperatorio_examen1;
+            examenExistente.examen2 = modelo.examen2;
+            examenExistente.recuperatorio_examen2 = modelo.recuperatorio_examen2;
+            examenExistente.examen3 = modelo.examen3;
+            examenExistente.recuperatorio_examen3 = modelo.recuperatorio_examen3;
+            examenExistente.examen_final = modelo.examen_final;
+            examenExistente.examen_integrador = modelo.examen_integrador;
+            examenExistente.nota_final = modelo.nota_final;
+            examenExistente.condicion_estudiante_materia_id = modelo.condicion_estudiante_materia_id;
 
-            if (examen == null)
-            {
-                return HttpNotFound("Examen no encontrado.");
-            }
-
-            // Actualizar las calificaciones
-            examen.examen1 = examenActualizado.examen1;
-            examen.recuperatorio_examen1 = examenActualizado.recuperatorio_examen1;
-            examen.examen2 = examenActualizado.examen2;
-            examen.recuperatorio_examen2 = examenActualizado.recuperatorio_examen2;
-            examen.examen3 = examenActualizado.examen3;
-            examen.recuperatorio_examen3 = examenActualizado.recuperatorio_examen3;
-            examen.examen_final = examenActualizado.examen_final;
-            examen.examen_integrador = examenActualizado.examen_integrador;
-            examen.nota_final = examenActualizado.nota_final;
-            examen.condicion_estudiante_materia_id = examenActualizado.condicion_estudiante_materia_id;
-
+            // Guarda los cambios en la base de datos.
             db.SaveChanges();
 
-            return RedirectToAction("ExamenesPorMateria", new { materiaId = examen.materia_id });
-        }
-    }
+            // Mensaje de éxito que se almacena temporalmente.
+            TempData["SuccessMessage"] = "Calificaciones actualizadas correctamente.";
 
+            // Redirige a la vista que muestra los estudiantes por materia.
+            return RedirectToAction("EstudiantesPorMateria", "Profesor", new { idMateria = modelo.materia_id });
+        }
+
+        // Acción para ver las calificaciones de un estudiante en una materia.
+        public ActionResult VerCalificaciones(int? estudiante_id, int? materia_id)  // Método para manejar la solicitud GET de ver calificaciones.
+        {
+            if (estudiante_id == null || materia_id == null)  // Verifica si los parámetros son nulos.
+            {
+                return new HttpStatusCodeResult(400, "Faltan parámetros.");  // Retorna un error 400 si faltan parámetros.
+            }
+
+            // Busca las calificaciones del estudiante en la materia especificada.
+            var calificaciones = db.ESTUDIANTEMATERIAEXAMEN
+                .Include(e => e.ESTUDIANTE)  // Incluye la información del estudiante.
+                .Include(e => e.MATERIA)  // Incluye la información de la materia.
+                .FirstOrDefault(e => e.estudiante_id == estudiante_id && e.materia_id == materia_id);  // Busca por el ID del estudiante y la materia.
+
+            if (calificaciones == null)  // Si no existen calificaciones, crea un objeto vacío para mostrar.
+            {
+                calificaciones = new ESTUDIANTEMATERIAEXAMEN
+                {
+                    estudiante_id = estudiante_id.Value,
+                    materia_id = materia_id.Value,
+                    ESTUDIANTE = db.ESTUDIANTE.Find(estudiante_id),
+                    MATERIA = db.MATERIA.Find(materia_id),
+                    CONDICIONESTUDIANTEMATERIA = db.CONDICIONESTUDIANTEMATERIA.FirstOrDefault(),
+                    examen1 = "N/A",  // Asigna "N/A" a las calificaciones.
+                    recuperatorio_examen1 = "N/A",
+                    examen2 = "N/A",
+                    recuperatorio_examen2 = "N/A",
+                    examen3 = "N/A",
+                    recuperatorio_examen3 = "N/A",
+                    examen_final = "N/A",
+                    examen_integrador = "N/A",
+                    nota_final = "N/A"
+                };
+            }
+
+            return View(calificaciones);  // Devuelve la vista con las calificaciones encontradas o vacías.
+        }
+
+    }
 }

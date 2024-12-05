@@ -1,4 +1,4 @@
-﻿using SistemaUniversidadv1._0.Models;
+﻿﻿using SistemaUniversidadv1._0.Models;
 using SistemaUniversidadv1._0.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -21,109 +21,129 @@ namespace SistemaUniversidadv1._0.Controllers
         {
             // Obtener la información del estudiante, incluyendo la carrera
             var estudiante = db.ESTUDIANTE
-                .Include(e => e.CARRERA)
-                .FirstOrDefault(e => e.id_estudiante == estudianteId);
+                .Include(e => e.CARRERA) // Incluye los datos relacionados con la carrera del estudiante
+                .FirstOrDefault(e => e.id_estudiante == estudianteId); // Busca al estudiante por su ID
 
             if (estudiante == null)
-                return HttpNotFound();
+                return HttpNotFound(); // Si no se encuentra al estudiante, retorna un error 404
 
+            // Obtener los ciclos asociados a la carrera del estudiante
             var ciclosConMaterias = db.CICLO
-                .Where(c => c.carrera_id == estudiante.carrera_id)
-                .Include(c => c.MATERIA)
+                .Where(c => c.carrera_id == estudiante.carrera_id) // Filtra los ciclos según la carrera del estudiante
+                .Include(c => c.MATERIA) // Incluye las materias asociadas a cada ciclo
                 .Select(ciclo => new CicloInscripcionViewModel
                 {
-                    NombreCiclo = ciclo.nombre_ciclo,
+                    NombreCiclo = ciclo.nombre_ciclo, // Asigna el nombre del ciclo
                     Materias = ciclo.MATERIA.Select(m => new MateriaInscripcionViewModel
                     {
-                        MateriaId = m.id_materia,
-                        NombreMateria = m.nombre_materia,
-                        codigo_materia = m.codigo_materia,
+                        MateriaId = m.id_materia, // Asigna el ID de la materia
+                        NombreMateria = m.nombre_materia, // Asigna el nombre de la materia
+                        codigo_materia = m.codigo_materia, // Asigna el código de la materia
+                                                           // Determina el estado de la inscripción: "Inscrito" o "No Inscrito"
                         Estado = db.INSCRIPCIONESTUDIANTEMATERIA
                             .Any(i => i.estudiante_id == estudianteId && i.materia_id == m.id_materia)
-                            ? "Inscrito"
-                            : "No Inscrito",
+                            ? "Inscrito" // Si ya está inscrito, muestra "Inscrito"
+                            : "No Inscrito", // Si no está inscrito, muestra "No Inscrito"
+                                             // Obtiene la fecha de inscripción de la materia
                         FechaInscripcion = db.INSCRIPCIONESTUDIANTEMATERIA
                             .Where(i => i.estudiante_id == estudianteId && i.materia_id == m.id_materia)
                             .Select(i => i.fecha_inscripcion_estudiante_materia)
-                            .FirstOrDefault() // Obtiene la fecha de inscripción
+                            .FirstOrDefault() // Devuelve la primera fecha de inscripción o null si no está inscrito
                     }).ToList()
                 })
-                .ToList();
+                .ToList(); // Convierte los ciclos con sus materias en una lista
 
             // Crear el ViewModel para la vista
             var viewModel = new ListadoInscripcionesViewModel
             {
-                EstudianteId = estudianteId,
-                NombreEstudiante = estudiante.nombre_estudiante + " " + estudiante.apellido_estudiante,
-                Ciclos = ciclosConMaterias
+                EstudianteId = estudianteId, // Asigna el ID del estudiante
+                NombreEstudiante = estudiante.nombre_estudiante + " " + estudiante.apellido_estudiante, // Asigna el nombre completo del estudiante
+                Ciclos = ciclosConMaterias // Asigna la lista de ciclos con materias
             };
 
-            return View(viewModel);
+            return View(viewModel); // Retorna la vista con el modelo de datos
         }
 
 
-
-        // Acción POST para inscribir materias a un estudiante
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult InscribirEstudianteMateria(int estudianteId, List<int> MateriaIds)
         {
             try
             {
+                // Verificar si no se seleccionó ninguna materia
+                if (MateriaIds == null || !MateriaIds.Any())
+                {
+                    // Eliminar todas las materias inscritas para el estudiante
+                    var materiasInscritas = db.INSCRIPCIONESTUDIANTEMATERIA
+                        .Where(i => i.estudiante_id == estudianteId) // Filtra las inscripciones del estudiante por su ID
+                        .ToList(); // Convierte los resultados en una lista
+
+                    foreach (var inscripcion in materiasInscritas)
+                    {
+                        db.INSCRIPCIONESTUDIANTEMATERIA.Remove(inscripcion); // Elimina cada inscripción
+                    }
+
+                    db.SaveChanges(); // Guarda los cambios en la base de datos
+                    TempData["SuccessMessage"] = "Todas las inscripciones fueron eliminadas correctamente."; // Mensaje de éxito
+                    return RedirectToAction("VerInscripciones", new { estudianteId = estudianteId }); // Redirige a la vista de inscripciones
+                }
+
                 // Obtener materias actualmente inscritas del estudiante
-                var materiasInscritas = db.INSCRIPCIONESTUDIANTEMATERIA
-                    .Where(i => i.estudiante_id == estudianteId)
-                    .Select(i => new { i.materia_id, i.fecha_inscripcion_estudiante_materia })
-                    .ToList();
+                var materiasInscritasActuales = db.INSCRIPCIONESTUDIANTEMATERIA
+                    .Where(i => i.estudiante_id == estudianteId) // Filtra las inscripciones del estudiante
+                    .Select(i => new { i.materia_id }) // Selecciona solo el ID de la materia
+                    .ToList(); // Convierte los resultados en una lista
 
                 // Nuevas inscripciones: Materias seleccionadas que no están inscritas
-                var nuevasInscripciones = MateriaIds.Except(materiasInscritas.Select(m => m.materia_id)).ToList();
-
+                var nuevasInscripciones = MateriaIds.Except(materiasInscritasActuales.Select(m => m.materia_id)).ToList();
                 // Materias a desinscribir: Materias inscritas que no están seleccionadas
-                var materiasDesinscribir = materiasInscritas
-                    .Where(m => !MateriaIds.Contains(m.materia_id))
-                    .Select(m => m.materia_id)
+                var materiasDesinscribir = materiasInscritasActuales
+                    .Where(m => !MateriaIds.Contains(m.materia_id)) // Filtra las materias que no están en la lista seleccionada
+                    .Select(m => m.materia_id) // Selecciona solo los IDs de las materias
                     .ToList();
 
                 // Fecha de inscripción: Se asigna la fecha actual para las nuevas inscripciones
                 DateTime fechaInscripcion = DateTime.Now;
 
-                // Agregar nuevas inscripciones con la fecha actual
+                // Agregar nuevas inscripciones
                 foreach (var materiaId in nuevasInscripciones)
                 {
                     var inscripcion = new INSCRIPCIONESTUDIANTEMATERIA
                     {
-                        estudiante_id = estudianteId,
-                        materia_id = materiaId,
-                        estado_inscripcion = true,
-                        fecha_inscripcion_estudiante_materia = fechaInscripcion
+                        estudiante_id = estudianteId, // Asigna el ID del estudiante
+                        materia_id = materiaId, // Asigna el ID de la materia
+                        estado_inscripcion = true, // Marca la inscripción como activa
+                        fecha_inscripcion_estudiante_materia = fechaInscripcion // Asigna la fecha de inscripción
                     };
 
-                    db.INSCRIPCIONESTUDIANTEMATERIA.Add(inscripcion);
+                    db.INSCRIPCIONESTUDIANTEMATERIA.Add(inscripcion); // Agrega la inscripción a la base de datos
                 }
 
                 // Eliminar inscripciones desmarcadas
                 foreach (var materiaId in materiasDesinscribir)
                 {
                     var inscripcion = db.INSCRIPCIONESTUDIANTEMATERIA
-                        .FirstOrDefault(i => i.estudiante_id == estudianteId && i.materia_id == materiaId);
+                        .FirstOrDefault(i => i.estudiante_id == estudianteId && i.materia_id == materiaId); // Busca la inscripción para eliminar
 
                     if (inscripcion != null)
                     {
-                        db.INSCRIPCIONESTUDIANTEMATERIA.Remove(inscripcion);
+                        db.INSCRIPCIONESTUDIANTEMATERIA.Remove(inscripcion); // Elimina la inscripción de la base de datos
                     }
                 }
 
-                db.SaveChanges();
-                TempData["SuccessMessage"] = "Las materias fueron actualizadas correctamente.";
-                return RedirectToAction("VerInscripciones", new { estudianteId = estudianteId });
+                db.SaveChanges(); // Guarda los cambios en la base de datos
+                TempData["SuccessMessage"] = "Las materias fueron actualizadas correctamente."; // Mensaje de éxito
+                return RedirectToAction("VerInscripciones", new { estudianteId = estudianteId }); // Redirige a la vista de inscripciones
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error al actualizar las materias: " + ex.Message);
-                return RedirectToAction("VerInscripciones", new { estudianteId = estudianteId });
+                ModelState.AddModelError("", "Error al actualizar las materias: " + ex.Message); // Si hay un error, agrega el mensaje al modelo
+                return RedirectToAction("VerInscripciones", new { estudianteId = estudianteId }); // Redirige a la vista de inscripciones
             }
         }
+
+
 
 
 

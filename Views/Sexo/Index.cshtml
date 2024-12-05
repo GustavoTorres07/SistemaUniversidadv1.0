@@ -54,9 +54,6 @@
                 <tr>
                     <td>@sexo.nombre_sexo</td>
                     <td>
-                        <a href="@Url.Action("Edit", "sexo", new { id = sexo.id_sexo })" class="btn btn-sm btn-warning">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarSexoModal"
                            data-id_sexo="@sexo.id_sexo" data-nombre_sexo="@sexo.nombre_sexo">
                             <i class="fa-solid fa-trash"></i>

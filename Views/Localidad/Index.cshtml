@@ -56,9 +56,6 @@
                 <tr>
                     <td>@localidad.nombre_localidad</td>
                     <td>
-                        <a href="@Url.Action("EditarLocalidad", "Localidad", new { id = localidad.id_localidad })" class="btn btn-sm btn-warning">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarLocalidadModal"
                            data-id_localidad="@localidad.id_localidad" data-nombre_localidad="@localidad.nombre_localidad">
                             <i class="fa-solid fa-trash"></i>
