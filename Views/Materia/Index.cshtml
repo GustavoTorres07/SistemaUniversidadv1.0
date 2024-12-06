@@ -4,10 +4,11 @@
     ViewBag.Title = "Gestión de Materias";
 }
 
+<link href="~/Content/index.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
 
 
@@ -134,6 +135,7 @@
             <button id="btnDescargarPDF" class="btn btn-primary" onclick="descargarPDF()" style="display: none;">
                 <i class="fa-regular fa-file-pdf"></i>
             </button>
+
         </div>
         <div class="carrera-selector">
             <select id="carrera_id" name="carrera_id" class="form-select">
@@ -436,7 +438,7 @@
             // Validar el formulario de creación de materia.
 
 
- function validarFormulario() {
+            function validarFormulario() {
                 var esValido = true;
 
                 $('#crearMateriaForm .form-control').each(function () {
@@ -460,11 +462,24 @@
                 setTimeout(function () { alerta.fadeOut(); }, 4000); // Oculta la alerta después de 4 segundos.
             }
 
-            // Ocultar el encabezado y botones inicialmente.
-            $('thead').hide();
-            $('#btnCrearMateria').hide();
-            $('#btnDescargarPDF').hide();
+
+                    // Función para descargar el PDF de las materias de la carrera seleccionada
+            function descargarPDF() {
+                var carreraId = $('#carrera_id').val();
+                if (carreraId) {
+                    window.location.href = '@Url.Action("GenerarPDFMaterias", "Materia")' + '?carreraId=' + carreraId;
+                }
+            }
+
+            // Configurar el botón de descarga de PDF
+            $('#btnDescargarPDF').click(function () {
+                descargarPDF();
+            });
         });
+
+
+
+
     </script>
 }
 

@@ -209,8 +209,22 @@
                 }
             }
 
+
             // Llama a la función de manejo de alertas al cargar la página.
             handleAlerts(); // Asegura que cualquier alerta visible se desvanezca automáticamente.
+
+            $('#editarCarreraModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Botón que activó el modal
+                var id_carrera = button.data('id_carrera');
+                var nombre_carrera = button.data('nombre_carrera');
+                var estado_carrera = button.data('estado_carrera');
+
+                var modal = $(this);
+                modal.find('#edit_id_carrera').val(id_carrera); // Establece el ID en el campo oculto
+                modal.find('#editar_nombre_carrera').val(nombre_carrera); // Establece el nombre
+                modal.find('#editar_estado_carrera').val(estado_carrera); // Establece el estado
+            });
+
 
             // Evento para mostrar el modal de eliminar carrera.
             $('#eliminarCarreraModal').on('show.bs.modal', function (event) {
