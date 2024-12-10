@@ -134,27 +134,27 @@
                 <tbody>
                     <tr class="evaluation-row">
                         <td>Primer Parcial</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen1) ? "-" : Model.examen1)</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.recuperatorio_examen1) ? "-" : Model.recuperatorio_examen1)</td>
+                        <td class="grade-cell">@Model.examen1</td>
+                        <td class="grade-cell">@Model.recuperatorio_examen1</td>
                     </tr>
                     <tr class="evaluation-row">
                         <td>Segundo Parcial</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen2) ? "-" : Model.examen2)</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.recuperatorio_examen2) ? "-" : Model.recuperatorio_examen2)</td>
+                        <td class="grade-cell">@Model.examen2</td>  
+                        <td class="grade-cell">@Model.recuperatorio_examen2</td>
                     </tr>
                     <tr class="evaluation-row">
                         <td>Tercer Parcial</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen3) ? "-" : Model.examen3)</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.recuperatorio_examen3) ? "-" : Model.recuperatorio_examen3)</td>
+                        <td class="grade-cell">@Model.examen3</td>
+                        <td class="grade-cell">@Model.recuperatorio_examen3</td>
                     </tr>
                     <tr class="evaluation-row">
                         <td>Examen Final</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen_final) ? "-" : Model.examen_final)</td>
-                        <td class="grade-cell">@(string.IsNullOrEmpty(Model.examen_integrador) ? "-" : Model.examen_integrador)</td>
+                        <td class="grade-cell">@Model.examen_final</td>
+                        <td class="grade-cell">@Model.examen_integrador</td>
                     </tr>
                     <tr class="evaluation-row">
                         <td><strong>Nota Final:</strong></td>
-                        <td colspan="2">@(!string.IsNullOrEmpty(Model.nota_final) ? Model.nota_final : "-")</td>
+                        <td class="grade-cell">@Model.nota_final</td>
                     </tr>
                     <tr class="evaluation-row">
                         <td><strong>Condición de la Materia:</strong></td>

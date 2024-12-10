@@ -143,10 +143,6 @@ namespace SistemaUniversidadv1._0.Controllers
             }
         }
 
-
-
-
-
         // Acción GET para ver las inscripciones de un estudiante
         [HttpGet]
         public ActionResult VerInscripciones(int estudianteId)
@@ -191,8 +187,6 @@ namespace SistemaUniversidadv1._0.Controllers
 
             return View(viewModel);
         }
-
-
         public ActionResult GenerarPDFInscripciones(int estudianteId)
         {
             var estudiante = db.ESTUDIANTE

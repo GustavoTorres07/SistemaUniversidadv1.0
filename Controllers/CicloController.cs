@@ -13,7 +13,7 @@ namespace SistemaUniversidadv1._0.Controllers
         private UniversidadContext db = new UniversidadContext();
 
         public ActionResult Index(int? carrera_id)
-        // Esta es la acción del controlador que recibe un parámetro opcional 'carrera_id', que representa el ID de la carrera seleccionada.
+        // Esta es la acción del controlador que recibe un parámetro 'carrera_id', que representa el ID de la carrera seleccionada.
 
         {
             // Cargar la lista de carreras para el dropdown
@@ -22,7 +22,7 @@ namespace SistemaUniversidadv1._0.Controllers
 
             // Si se selecciona una carrera, filtrar ciclos por esa carrera
             if (carrera_id != null)
-            // Si 'carrera_id' no es nulo (es decir, el usuario seleccionó una carrera), entonces filtra los ciclos asociados a esa carrera.
+            // Si 'carrera_id' no es nulo filtra los ciclos asociados a esa carrera.
 
             {
                 var carreraSeleccionada = db.CARRERA.Find(carrera_id);
@@ -65,8 +65,8 @@ namespace SistemaUniversidadv1._0.Controllers
 
         {
             // Verificar si ya existe un ciclo con el mismo nombre en la carrera seleccionada
-            if (db.CICLO.Any(c => c.carrera_id == carrera_id && c.nombre_ciclo == nombre_ciclo))
-            // Verifica si ya existe un ciclo con el mismo 'nombre_ciclo' y 'carrera_id' en la base de datos. Si existe, se ejecuta el bloque siguiente.
+            if (db.CICLO.Any(c => c.nombre_ciclo == nombre_ciclo))
+            // Verifica si ya existe un ciclo con el mismo 'nombre_ciclo' en la base de datos. Si existe, se ejecuta el bloque siguiente.
 
             {
                 TempData["Error"] = "El ciclo ya existe en esta carrera.";
@@ -113,7 +113,7 @@ namespace SistemaUniversidadv1._0.Controllers
 
             // Verificar si el ciclo tiene materias asociadas
             if (db.MATERIA.Any(m => m.ciclo_id == id_ciclo))
-            // Verifica si hay alguna materia asociada al ciclo (es decir, si existe alguna materia cuyo 'ciclo_id' coincida con 'id_ciclo').
+            // Verifica si hay alguna materia asociada al ciclo
 
             {
                 TempData["Error"] = "No se puede eliminar el ciclo porque tiene materias asociadas.";

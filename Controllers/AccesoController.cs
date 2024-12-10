@@ -1,19 +1,19 @@
-﻿using SistemaUniversidadv1._0.Models;  // Importa el espacio de nombres para los modelos de la aplicación
-using System;  // Importa el espacio de nombres para clases base de .NET
-using System.Linq;  // Importa el espacio de nombres para consultas LINQ
-using System.Web;  // Importa el espacio de nombres para funcionalidades web
-using System.Web.Mvc;  // Importa el espacio de nombres para MVC (Model-View-Controller)
+﻿using SistemaUniversidadv1._0.Models;  // Importo el espacio de nombres para los modelos de la aplicación
+using System;  
+using System.Linq;  // Importo el espacio de nombres para consultas LINQ
+using System.Web;  
+using System.Web.Mvc;  
 using System.Web.Security;  // Importa el espacio de nombres para manejar autenticación y seguridad en formularios
 
 namespace SistemaUniversidadv1._0.Controllers  
 {
     public class AccesoController : Controller  
     {
-        private readonly UniversidadContext db;  // Declara un contexto de base de datos para interactuar con el modelo de datos
+        private readonly UniversidadContext db;  // Declaro el contexto de base de datos para interactuar con el modelo 
 
         public AccesoController()  // Constructor que inicializa el contexto de base de datos
         {
-            db = new UniversidadContext();  // Inicializa el contexto de base de datos
+            db = new UniversidadContext();  
         }
 
         // Acción GET: Muestra el formulario de login
@@ -56,11 +56,11 @@ namespace SistemaUniversidadv1._0.Controllers
 
                 // Crea un ticket de autenticación para el usuario y una cookie
                 var authTicket = new FormsAuthenticationTicket(
-                    1,  // Versión del ticket (generalmente es 1)
+                    1,  // Versión del ticket 
                     usuario.usuario_usuario,  // Nombre de usuario
                     DateTime.Now,  // Hora de creación del ticket
-                    DateTime.Now.AddMinutes(30),  // Hora de expiración del ticket (30 minutos)
-                    false,  // Si el ticket es persistente (no lo es en este caso)
+                    DateTime.Now.AddMinutes(30),  // Hora de expiración del ticket 
+                    false,  // Si el ticket es persistente 
                     usuario.rol_id.ToString()  // Incluye el rol del usuario en el ticket para su uso posterior
                 );
 

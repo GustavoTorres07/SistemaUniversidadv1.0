@@ -68,9 +68,6 @@ public class MateriaController : Controller
     {
         try
         {
-            // Se registra en el log los datos que se están recibiendo.
-            System.Diagnostics.Debug.WriteLine($"Recibiendo datos: Ciclo={materia.ciclo_id}, Nombre={materia.nombre_materia}, Código={materia.codigo_materia}");
-
             // Si el modelo es válido, se crea una nueva materia en la base de datos.
             if (ModelState.IsValid)
             {
@@ -90,11 +87,10 @@ public class MateriaController : Controller
                 return Json(new { success = true, message = "Materia creada correctamente." });
             }
 
-            // Si el modelo no es válido, se logean los errores del ModelState.
+            // Si el modelo no es válido, se recopilan los errores del ModelState.
             var errores = ModelState.Values.SelectMany(v => v.Errors)
                                             .Select(e => e.ErrorMessage)
                                             .ToList();
-            System.Diagnostics.Debug.WriteLine("Errores de ModelState: " + string.Join(", ", errores));
 
             // Se retorna una respuesta JSON con los errores encontrados.
             return Json(new
@@ -104,19 +100,17 @@ public class MateriaController : Controller
                 errores = errores
             });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Si ocurre un error, se captura la excepción y se registra en el log.
-            System.Diagnostics.Debug.WriteLine($"Error al crear materia: {ex.Message}");
-
-            // Se retorna una respuesta JSON con el mensaje de error.
+            // Se retorna una respuesta JSON con un mensaje genérico de error.
             return Json(new
             {
                 success = false,
-                message = "Error al crear la materia: " + ex.Message
+                message = "Ocurrió un error al crear la materia."
             });
         }
     }
+
 
     // Acción para eliminar una materia.
     [HttpPost]  // Indica que esta acción maneja solicitudes POST.

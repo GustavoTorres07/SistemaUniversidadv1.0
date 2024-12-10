@@ -118,17 +118,5 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
-        $(document).ready(function () {
-            // Validación de notas (opcional)
-            $('input[type="text"]').on('input', function () {
-                var value = $(this).val();
-                if (value !== '' && (isNaN(value) || value < 0 || value > 10)) {
-                    $(this).addClass('is-invalid');
-                } else {
-                    $(this).removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
+
 }

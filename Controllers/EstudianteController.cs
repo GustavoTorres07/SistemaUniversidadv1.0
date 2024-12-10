@@ -45,7 +45,7 @@ namespace SistemaUniversidadv1._0.Controllers
         [HttpGet]
         public ActionResult CrearEstudiante()
         {
-            // Llama a un método para cargar las opciones de select lists (sexos, carreras, etc.)
+            // Llama a un método para cargar las opciones 
             CargarViewBags();
 
             // Devuelve la vista para crear un estudiante.
@@ -175,7 +175,17 @@ namespace SistemaUniversidadv1._0.Controllers
                     return HttpNotFound();
                 }
 
-                // Elimina el estudiante de la base de datos y guarda los cambios.
+                // Verifica si el estudiante tiene inscripciones asociadas.
+                bool tieneMateriasInscritas = db.INSCRIPCIONESTUDIANTEMATERIA.Any(i => i.estudiante_id == id_Estudiante);
+
+                // Si el estudiante tiene materias inscritas, no se puede eliminar.
+                if (tieneMateriasInscritas)
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar el estudiante";
+                    return RedirectToAction("Index");
+                }
+
+                // Si no tiene materias inscritas, se procede con la eliminación.
                 db.ESTUDIANTE.Remove(estudiante);
                 db.SaveChanges();
 
@@ -183,12 +193,13 @@ namespace SistemaUniversidadv1._0.Controllers
                 TempData["SuccessMessage"] = "El estudiante se eliminó correctamente.";
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                TempData["ErrorMessage"] = "Error al eliminar el estudiante: " + ex.Message;
+                TempData["ErrorMessage"] = "Error al eliminar el estudiante.";
                 return RedirectToAction("Index");
             }
         }
+
 
         // Método auxiliar para cargar los datos necesarios para los select list en los formularios.
         private void CargarViewBags()

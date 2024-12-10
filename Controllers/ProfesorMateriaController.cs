@@ -22,7 +22,7 @@ namespace SistemaUniversidadv1._0.Controllers
             // Obtiene la lista de asignaciones de profesores a materias con las materias y usuarios asociados.
             var asignaciones = db.PROFESORMATERIA
                 .Include(pm => pm.MATERIA)  // Incluye la relación con la entidad MATERIA.
-                .Include(pm => pm.USUARIO)  // Incluye la relación con la entidad USUARIO (profesor).
+                .Include(pm => pm.USUARIO)  // Incluye la relación con la entidad USUARIO.
                 .ToList(); // Convierte el resultado en una lista.
 
             // Asigna una lista de carreras a la vista para usarla en un campo de selección.

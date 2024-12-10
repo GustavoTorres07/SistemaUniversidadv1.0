@@ -105,7 +105,7 @@ namespace SistemaUniversidadv1._0.Controllers
             catch (Exception ex)
             {
                 // Capturar el mensaje de error y pasarlo a TempData
-                TempData["Error"] = "Error al eliminar el sexo: " + ex.Message;
+                TempData["Error"] = "Error al eliminar el sexo: ";
                 return RedirectToAction("Index");
             }
         }
