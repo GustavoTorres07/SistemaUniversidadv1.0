@@ -32,7 +32,7 @@ namespace SistemaUniversidadv1._0.Controllers  // Define el espacio de nombres d
                 {
                     estudiante_id = estudiante_id.Value,
                     materia_id = materia_id.Value,
-                    condicion_estudiante_materia_id = 1, // Asigna el valor predeterminado de condición
+                    condicion_estudiante_materia_id = 8, // Asigna el valor predeterminado de condición
                     examen1 = "", // Inicializa las calificaciones vacías
                     examen2 = "",
                     examen3 = "",

@@ -99,16 +99,30 @@
     }
 
     /* Hace los botones aún más pequeños */
-    .btn-danger {
+    /*.btn-danger {
+        padding: 0.15rem 0.3rem;
+        font-size: 0.75rem;
+        line-height: 1;
+        margin: 0;
+    }*/
+/*
+        .btn-danger i {
+            font-size: 0.75rem;
+        }*/
+
+    .table .btn-danger {
+
         padding: 0.15rem 0.3rem;
         font-size: 0.75rem;
         line-height: 1;
         margin: 0;
     }
 
-        .btn-danger i {
-            font-size: 0.75rem;
-        }
+    .table .btn-danger i {
+
+        font-size: 0.75rem;
+
+    }
 
     /* Reduce el espacio entre filas */
     .table tr {
@@ -242,7 +256,8 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id_materia" id="idMateriaEliminar" />
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt me-1"></i>Eliminar</button>
                 </form>
             </div>
         </div>
